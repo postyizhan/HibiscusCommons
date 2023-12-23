@@ -6,7 +6,7 @@ public class StringUtils {
 
     @NotNull
     public static String parseStringToString(final String parsed) {
-        return Adventure.SERIALIZER.serialize(Adventure.MINI_MESSAGE.deserialize(parsed));
+        return AdventureUtils.SERIALIZER.serialize(AdventureUtils.MINI_MESSAGE.deserialize(parsed));
     }
 
 }

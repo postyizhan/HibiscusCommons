@@ -4,7 +4,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-public class Adventure {
+public class AdventureUtils {
 
     public static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
             .hexColors()
