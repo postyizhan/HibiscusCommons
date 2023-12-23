@@ -4,14 +4,18 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -213,6 +217,30 @@ public class PacketManager {
             viewers.addAll(getNearbyPlayers(location, distance));
         }
         return viewers;
+    }
+
+    public void slotUpdate(
+            Player player,
+            int slot
+    ) {
+        NMSHandlers.getHandler().slotUpdate(player, slot);
+    }
+
+    public void equipmentSlotUpdate(
+            int entityId,
+            org.bukkit.inventory.EquipmentSlot slot,
+            ItemStack item,
+            List<Player> sendTo
+    ) {
+        NMSHandlers.getHandler().equipmentSlotUpdate(entityId, slot, item, sendTo);
+    }
+
+    public void equipmentSlotUpdate(
+            int entityId,
+            HashMap<EquipmentSlot, ItemStack> equipment,
+            List<Player> sendTo
+    ) {
+        NMSHandlers.getHandler().equipmentSlotUpdate(entityId, equipment, sendTo);
     }
 
     private static List<Player> getNearbyPlayers(Location location, int distance) {
