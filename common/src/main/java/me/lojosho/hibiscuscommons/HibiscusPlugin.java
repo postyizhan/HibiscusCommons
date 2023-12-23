@@ -3,7 +3,10 @@ package me.lojosho.hibiscuscommons;
 import com.jeff_media.updatechecker.UpdateCheckSource;
 import com.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
+import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class HibiscusPlugin extends JavaPlugin {
@@ -35,6 +38,15 @@ public abstract class HibiscusPlugin extends JavaPlugin {
     @Override
     public final void onEnable() {
         super.onEnable();
+
+        Plugin hibiscusCommons = Bukkit.getPluginManager().getPlugin("HibiscusCommons");
+        if (hibiscusCommons == null || !hibiscusCommons.isEnabled()) {
+            getLogger().severe("");
+            getLogger().severe("HibiscusCommons is required to be enabled to run this plugin!");
+            getLogger().severe("");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         if (bstats > 0) {
             Metrics metrics = new Metrics(this, bstats);
