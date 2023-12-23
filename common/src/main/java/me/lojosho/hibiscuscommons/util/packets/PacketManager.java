@@ -219,14 +219,14 @@ public class PacketManager {
         return viewers;
     }
 
-    public void slotUpdate(
+    public static void slotUpdate(
             Player player,
             int slot
     ) {
         NMSHandlers.getHandler().slotUpdate(player, slot);
     }
 
-    public void equipmentSlotUpdate(
+    public static void equipmentSlotUpdate(
             int entityId,
             org.bukkit.inventory.EquipmentSlot slot,
             ItemStack item,
@@ -235,7 +235,7 @@ public class PacketManager {
         NMSHandlers.getHandler().equipmentSlotUpdate(entityId, slot, item, sendTo);
     }
 
-    public void equipmentSlotUpdate(
+    public static void equipmentSlotUpdate(
             int entityId,
             HashMap<EquipmentSlot, ItemStack> equipment,
             List<Player> sendTo
