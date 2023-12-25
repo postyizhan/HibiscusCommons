@@ -61,7 +61,6 @@ public class Hooks {
 
     public static void setup() {
         for (Hook hook : hooks.values()) {
-            HibiscusCommonsPlugin.getInstance().getLogger().info("Attempting to hook into " + hook.getId());
             if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null) {
                 HibiscusCommonsPlugin.getInstance().getServer().getPluginManager().registerEvents(hook, HibiscusCommonsPlugin.getInstance());
                 hook.setActive(true);
