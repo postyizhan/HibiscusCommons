@@ -4,7 +4,6 @@ import lombok.Getter;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.ServerUtils;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HibiscusCommonsPlugin extends HibiscusPlugin {
 

@@ -3,7 +3,6 @@ package me.lojosho.hibiscuscommons;
 import com.jeff_media.updatechecker.UpdateCheckSource;
 import com.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
-import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

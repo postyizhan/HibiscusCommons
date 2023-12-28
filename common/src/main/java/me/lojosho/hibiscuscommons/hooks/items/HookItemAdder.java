@@ -45,4 +45,11 @@ public class HookItemAdder extends Hook {
         this.enabled = true;
         //HMCCosmeticsPlugin.setup();
     }
+
+    public String getItemString(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        if (!itemStack.hasItemMeta()) return null;
+        if (CustomStack.byItemStack(itemStack) == null) return null;
+        return CustomStack.byItemStack(itemStack).getId();
+    }
 }

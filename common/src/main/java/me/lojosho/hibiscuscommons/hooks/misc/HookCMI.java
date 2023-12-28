@@ -20,13 +20,13 @@ public class HookCMI extends Hook {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerVanish(@NotNull CMIPlayerVanishEvent event) {
-        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(event.getPlayer());
+        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(this, event.getPlayer());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerShow(@NotNull CMIPlayerUnVanishEvent event) {
-        HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(event.getPlayer());
+        HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(this, event.getPlayer());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 }

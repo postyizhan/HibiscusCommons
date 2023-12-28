@@ -1,19 +1,19 @@
 package me.lojosho.hibiscuscommons.api.events;
 
+import me.lojosho.hibiscuscommons.hooks.Hook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class HibiscusPlayerVanishEvent extends PlayerEvent implements Cancellable {
+public class HibiscusPlayerVanishEvent extends HibiscusHookPlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
     private boolean cancel = false;
 
-    public HibiscusPlayerVanishEvent(Player player) {
-        super(player);
+    public HibiscusPlayerVanishEvent(Hook hook, Player player) {
+        super(hook, player);
     }
 
     @NotNull

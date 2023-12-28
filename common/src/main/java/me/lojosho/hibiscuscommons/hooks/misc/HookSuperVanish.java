@@ -22,13 +22,13 @@ public class HookSuperVanish extends Hook {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerVanish(@NotNull PlayerHideEvent event) {
-        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(event.getPlayer());
+        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(this, event.getPlayer());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerShow(@NotNull PlayerShowEvent event) {
-        HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(event.getPlayer());
+        HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(this, event.getPlayer());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 }

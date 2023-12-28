@@ -25,4 +25,12 @@ public class HookOraxen extends Hook {
         if (builder == null) return null;
         return builder.build();
     }
+
+    @Override
+    public String getItemString(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        if (!itemStack.hasItemMeta()) return null;
+        if (!OraxenItems.exists(itemStack)) return null;
+        return OraxenItems.getIdByItem(itemStack);
+    }
 }

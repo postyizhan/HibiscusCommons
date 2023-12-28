@@ -2,7 +2,6 @@ package me.lojosho.hibiscuscommons.util;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
-import me.lojosho.hibiscuscommons.nms.NMSHandler;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;

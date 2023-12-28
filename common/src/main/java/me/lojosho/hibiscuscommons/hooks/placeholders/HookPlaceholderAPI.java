@@ -1,7 +1,7 @@
 package me.lojosho.hibiscuscommons.hooks.placeholders;
 
-import me.lojosho.hibiscuscommons.hooks.Hook;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.lojosho.hibiscuscommons.hooks.Hook;
 
 import java.util.ArrayList;
 

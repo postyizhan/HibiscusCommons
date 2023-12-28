@@ -1,5 +1,6 @@
 package me.lojosho.hibiscuscommons.hooks;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ public abstract class Hook implements Listener {
     private final String id;
     private boolean active = false;
     private boolean itemHook = false;
+    private boolean entityHook = false;
 
     public Hook(@NotNull String id, HookFlag... flags) {
         this.id = id;
@@ -19,6 +21,9 @@ public abstract class Hook implements Listener {
             switch (flag) {
                 case ITEM_SUPPORT:
                     setEnabledItemHook(true);
+                    break;
+                case ENTITY_SUPPORT:
+                    setEnabledEntityHook(true);
                     break;
             }
         }
@@ -90,11 +95,27 @@ public abstract class Hook implements Listener {
         return itemHook;
     }
 
+    public final boolean hasEnabledEntityHook() {
+        return entityHook;
+    }
+
     /**
      * Sets whether the method {@link #getItem(String)} should return a non-null value
      * @param enabled true if {@link #getItem(String)} should return a non-null value, false otherwise
      */
     public final void setEnabledItemHook(boolean enabled) {
         itemHook = enabled;
+    }
+
+    public final void setEnabledEntityHook(boolean enabled) {
+        entityHook = enabled;
+    }
+
+    public String getItemString(@NotNull ItemStack itemStack) {
+        return null;
+    }
+
+    public String getEntityString(@NotNull Entity entity) {
+        return null;
     }
 }

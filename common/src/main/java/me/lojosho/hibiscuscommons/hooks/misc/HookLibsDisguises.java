@@ -18,14 +18,14 @@ public class HookLibsDisguises extends Hook {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerVanish(@NotNull DisguiseEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(player);
+        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(this, player);
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerShow(@NotNull UndisguiseEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(player);
+        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(this, player);
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 }

@@ -15,4 +15,13 @@ public class HookEco extends Hook {
     public ItemStack getItem(@NotNull String itemId) {
         return Items.lookup(itemId).getItem();
     }
+
+    @Override
+    public String getItemString(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        if (!itemStack.hasItemMeta()) return null;
+        if (!Items.isCustomItem(itemStack)) return null;
+        // This should work? I'm not sure if it will return the correct key
+        return Items.getCustomItem(itemStack).getKey().toString();
+    }
 }

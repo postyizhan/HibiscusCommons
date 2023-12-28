@@ -6,10 +6,10 @@ import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.hooks.items.*;
 import me.lojosho.hibiscuscommons.hooks.misc.*;
 import me.lojosho.hibiscuscommons.hooks.placeholders.HookPlaceholderAPI;
-import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +33,8 @@ public class Hooks {
     private static final HookMMOItems MMO_ITEMS_HOOK = new HookMMOItems();
     private static final HookEco ECO_ITEMS_HOOK = new HookEco();
     private static final HookPlaceholderAPI PAPI_HOOK = new HookPlaceholderAPI();
+    private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
+
 
     public static Hook getHook(@NotNull String id) {
         return hooks.get(id.toLowerCase());
@@ -87,6 +89,28 @@ public class Hooks {
         if (!hook.hasEnabledItemHook()) return null;
         if (!hook.isActive()) return null;
         return hook.getItem(split[1]);
+    }
+
+    public static String getStringItem(ItemStack itemStack) {
+        for (Hook hook : hooks.values()) {
+            if (hook.hasEnabledItemHook()) {
+                String stringyItem = hook.getItemString(itemStack);
+                if (stringyItem == null) continue;
+                return hook.getId() + ":" + stringyItem;
+            }
+        }
+        return itemStack.getType().toString();
+    }
+
+    public static String getStringEntity(Entity entity) {
+        for (Hook hook : hooks.values()) {
+            if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null && hook.hasEnabledEntityHook()) {
+                String stringyEntity = hook.getEntityString(entity);
+                if (stringyEntity != null) return hook.getId() + ":" + stringyEntity;
+            }
+        }
+
+        return entity.getType().toString().toUpperCase();
     }
 
     public static boolean isActiveHook(String id) {

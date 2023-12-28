@@ -5,7 +5,6 @@ import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
 
 public class NMSHandlers {
 
