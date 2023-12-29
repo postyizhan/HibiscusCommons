@@ -104,6 +104,9 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
+    implementation(project(path = ":v1_18_R2", configuration = "reobf"))
+    implementation(project(path = ":v1_19_R2", configuration = "reobf"))
+    implementation(project(path = ":v1_19_R3", configuration = "reobf"))
     implementation(project(path = ":v1_20_R1", configuration = "reobf"))
     implementation(project(path = ":v1_20_R2", configuration = "reobf"))
     implementation(project(path = ":v1_20_R3", configuration = "reobf"))
@@ -125,6 +128,9 @@ tasks {
     }
 
     shadowJar {
+        dependsOn(":v1_18_R2:reobfJar")
+        dependsOn(":v1_19_R2:reobfJar")
+        dependsOn(":v1_19_R3:reobfJar")
         dependsOn(":v1_20_R1:reobfJar")
         dependsOn(":v1_20_R2:reobfJar")
         dependsOn(":v1_20_R3:reobfJar")
