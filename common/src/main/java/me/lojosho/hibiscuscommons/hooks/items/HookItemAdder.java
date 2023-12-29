@@ -52,4 +52,8 @@ public class HookItemAdder extends Hook {
         if (CustomStack.byItemStack(itemStack) == null) return null;
         return CustomStack.byItemStack(itemStack).getId();
     }
+
+    public boolean getIAEnabled() {
+        return enabled;
+    }
 }
