@@ -39,11 +39,10 @@ public class HookItemAdder extends Hook {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onItemAdderDataLoad(ItemsAdderLoadDataEvent event) {
-        HibiscusHookReload newEvent = new HibiscusHookReload(this);
-        Bukkit.getPluginManager().callEvent(newEvent);
-        //if (enabled && !Settings.isItemsAdderChangeReload()) return;
+        HibiscusHookReload.ReloadType reloadType = enabled ? HibiscusHookReload.ReloadType.RELOAD : HibiscusHookReload.ReloadType.INITIAL;
         this.enabled = true;
-        //HMCCosmeticsPlugin.setup();
+        HibiscusHookReload newEvent = new HibiscusHookReload(this, reloadType);
+        Bukkit.getPluginManager().callEvent(newEvent);
     }
 
     public String getItemString(ItemStack itemStack) {

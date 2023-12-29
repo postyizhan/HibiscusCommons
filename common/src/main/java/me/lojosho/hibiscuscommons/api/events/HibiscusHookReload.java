@@ -11,8 +11,11 @@ public class HibiscusHookReload extends HibiscusHookEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    public HibiscusHookReload(Hook hook) {
+    private final ReloadType reloadType;
+
+    public HibiscusHookReload(Hook hook, ReloadType reloadType) {
         super(hook);
+        this.reloadType = reloadType;
     }
 
     @NotNull
@@ -24,5 +27,14 @@ public class HibiscusHookReload extends HibiscusHookEvent {
     @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+
+    public ReloadType getReloadType() {
+        return reloadType;
+    }
+
+    public enum ReloadType {
+        INITIAL,
+        RELOAD
     }
 }
