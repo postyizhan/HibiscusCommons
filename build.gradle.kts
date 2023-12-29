@@ -1,10 +1,12 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
     id("java")
     id("maven-publish")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("io.papermc.hangar-publish-plugin") version "0.1.1"
 }
 
 group = "me.lojosho"
@@ -190,6 +192,30 @@ bukkit {
         "org.apache.commons:commons-lang3:3.14.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set(project.version as String)
+        channel.set("Release")
+        if (project.version.toString().contains("-")) channel.set("Snapshot") // If its a dev build, it will have -dev on it
+        id.set("HibiscusCommons")
+        apiKey.set(System.getenv("HANGAR_API_TOKEN"))
+        platforms {
+            register(Platforms.PAPER) {
+                jar.set(tasks.jar.flatMap { it.archiveFile })
+
+                val versions: List<String> = listOf("1.18.2-1.20.4")
+                platformVersions.set(versions)
+
+                dependencies {
+                    hangar("ProtocolLib") {
+                        required.set(true)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Publishing stuff below here to a remote maven repo

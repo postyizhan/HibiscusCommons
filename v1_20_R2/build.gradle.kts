@@ -1,10 +1,10 @@
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev") version "1.5.1"
+    id("io.papermc.paperweight.userdev") version "1.5.11"
 }
 
 dependencies {
-    paperDevBundle("1.20.2-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
     implementation(project(":common"))
 }
 
