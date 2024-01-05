@@ -93,7 +93,7 @@ public class Hooks {
 
     public static String getStringItem(ItemStack itemStack) {
         for (Hook hook : hooks.values()) {
-            if (hook.hasEnabledItemHook()) {
+            if (hook.isActive() && hook.hasEnabledItemHook()) {
                 String stringyItem = hook.getItemString(itemStack);
                 if (stringyItem == null) continue;
                 return hook.getId() + ":" + stringyItem;
@@ -104,7 +104,7 @@ public class Hooks {
 
     public static String getStringEntity(Entity entity) {
         for (Hook hook : hooks.values()) {
-            if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null && hook.hasEnabledEntityHook()) {
+            if (hook.isActive() && hook.hasEnabledEntityHook()) {
                 String stringyEntity = hook.getEntityString(entity);
                 if (stringyEntity != null) return hook.getId() + ":" + stringyEntity;
             }
