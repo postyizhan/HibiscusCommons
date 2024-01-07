@@ -15,7 +15,8 @@ public class HookCustomFishing extends Hook {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFish(FishingLootSpawnEvent event) {
-        HibiscusPluginFishEvent newEvent = new HibiscusPluginFishEvent(this, event.getPlayer(), event.getItemStack());
+        if (event.getItem() == null) return;
+        HibiscusPluginFishEvent newEvent = new HibiscusPluginFishEvent(this, event.getPlayer(), event.getItem().getItemStack());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 }

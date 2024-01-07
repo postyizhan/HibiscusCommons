@@ -80,7 +80,7 @@ allprojects {
         compileOnly("LibsDisguises:LibsDisguises:10.0.21") {
             exclude("org.spigotmc", "spigot")
         }
-        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.0.7")
+        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.0.10.3")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
 
         // Lombok <3
