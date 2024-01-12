@@ -12,6 +12,10 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
     @Getter
     private static boolean onPaper = false;
 
+    public HibiscusCommonsPlugin() {
+        super(20726);
+    }
+
     @Override
     public void onStart() {
         instance = this;
