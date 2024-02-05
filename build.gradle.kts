@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.2.5"
+version = "0.2.6"
 
 allprojects {
     apply(plugin = "java")
