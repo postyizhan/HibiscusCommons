@@ -13,13 +13,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ItemSerializer implements TypeSerializer<ItemStack> {
@@ -132,12 +137,24 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
                     // This means it has PAPI placeholders in it
                     skullMeta.getPersistentDataContainer().set(InventoryUtils.getSkullTexture(), PersistentDataType.STRING, textureString);
                 }
-                Bukkit.getUnsafe().modifyItemStack(item, "{SkullOwner:{Id:[I;0,0,0,0],Properties:{textures:[{Value:\""
-                        + textureString + "\"}]}}}");
+                // Decodes the texture string and sets the texture url to the skull
+                PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
+                PlayerTextures textures = profile.getTextures();
 
-
-                itemMeta = skullMeta;
+                String decoded = new String(Base64.getDecoder().decode(textureString));
+                URL url = null;
+                try {
+                    url = new URL(decoded.substring("{\"textures\":{\"SKIN\":{\"url\":\"".length(), decoded.length() - "\"}}}".length()));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                if (url != null) {
+                    textures.setSkin(url);
+                    profile.setTextures(textures);
+                    skullMeta.setOwnerProfile(profile);
+                }
             }
+            itemMeta = skullMeta;
         }
 
         if (!colorNode.virtual()) {
