@@ -2,6 +2,7 @@ package me.lojosho.hibiscuscommons.hooks.misc;
 
 import me.libraryaddict.disguise.events.DisguiseEvent;
 import me.libraryaddict.disguise.events.UndisguiseEvent;
+import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerUnVanishEvent;
 import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerVanishEvent;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ public class HookLibsDisguises extends Hook {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerShow(@NotNull UndisguiseEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        HibiscusPlayerVanishEvent newEvent = new HibiscusPlayerVanishEvent(this, player);
+        HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(this, player);
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 }
