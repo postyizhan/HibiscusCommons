@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class NMSHandlers {
 
-    private static final String[] SUPPORTED_VERSION = new String[]{"v1_18_R2", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_20_R1", "v1_20_R2", "v1_20_R3"};
+    private static final String[] SUPPORTED_VERSION = new String[]{"v1_18_R2", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_20_R1", "v1_20_R2", "v1_20_R3", "v1_20_R4"};
     private static NMSHandler handler;
     @Getter
     private static String version;

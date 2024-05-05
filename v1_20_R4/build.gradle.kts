@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.18.2-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
     implementation(project(":common"))
 }
 
@@ -16,8 +16,11 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
     }
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(21));
+    }
+
     javadoc {
         options.encoding = Charsets.UTF_8.name()
     }

@@ -1,12 +1,13 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
-import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
     id("java")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.github.goooler.shadow") version "8.1.7" // Temp shadow repo with fix
+    //id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
-    id("io.papermc.hangar-publish-plugin") version "0.1.1"
+    //id("io.papermc.hangar-publish-plugin") version "0.1.1"
+    id("io.papermc.paperweight.userdev") version "1.7.0" apply false
 }
 
 group = "me.lojosho"
@@ -84,9 +85,9 @@ allprojects {
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
 
         // Lombok <3
-        annotationProcessor("org.projectlombok:lombok:1.18.28")
-        testCompileOnly("org.projectlombok:lombok:1.18.28")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.28")
+        annotationProcessor("org.projectlombok:lombok:1.18.32")
+        testCompileOnly("org.projectlombok:lombok:1.18.32")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
 
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.15.0")
@@ -110,12 +111,13 @@ dependencies {
     implementation(project(path = ":v1_20_R1", configuration = "reobf"))
     implementation(project(path = ":v1_20_R2", configuration = "reobf"))
     implementation(project(path = ":v1_20_R3", configuration = "reobf"))
+    implementation(project(path = ":v1_20_R4", configuration = "reobf"))
 }
 
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        //options.release.set(17)
     }
 
     javadoc {
@@ -134,6 +136,7 @@ tasks {
         dependsOn(":v1_20_R1:reobfJar")
         dependsOn(":v1_20_R2:reobfJar")
         dependsOn(":v1_20_R3:reobfJar")
+        dependsOn(":v1_20_R4:reobfJar")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")
@@ -155,11 +158,10 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
-}
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17
-    ))
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 // Handles generating the plugin yml
@@ -199,7 +201,7 @@ bukkit {
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
 }
-
+/*
 hangarPublish {
     publications.register("plugin") {
         version.set(project.version as String)
@@ -223,7 +225,7 @@ hangarPublish {
         }
     }
 }
-
+*/
 // Publishing stuff below here to a remote maven repo
 
 publishing {
