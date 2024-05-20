@@ -7,7 +7,7 @@ plugins {
     //id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
-    id("io.papermc.paperweight.userdev") version "1.7.0" apply false
+    id("io.papermc.paperweight.userdev") version "1.7.1" apply false
 }
 
 group = "me.lojosho"
