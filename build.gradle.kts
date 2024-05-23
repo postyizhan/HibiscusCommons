@@ -167,7 +167,7 @@ tasks {
 bukkit {
     load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
     main = "me.lojosho.hibiscuscommons.HibiscusCommonsPlugin"
-    apiVersion = "1.18"
+    apiVersion = "1.19"
     authors = listOf("LoJoSho")
     depend = listOf("ProtocolLib")
     softDepend = listOf(
