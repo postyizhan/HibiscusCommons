@@ -12,7 +12,7 @@ public class NMSHandlers {
 
     private static final HashMap<String, String> VERSION_MAP = new HashMap<>() {{
         put("1.19.4", "v1_19_R3");
-        put("1.20", "v1_20_R1");
+        put("1.20.1", "v1_20_R1");
         put("1.20.2", "v1_20_R2");
         put("1.20.4", "v1_20_R3");
         put("1.20.6", "v1_20_R4");
