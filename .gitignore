@@ -16,3 +16,4 @@
 /output/
 .gradle
 build
+/run/

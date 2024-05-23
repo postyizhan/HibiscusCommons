@@ -7,11 +7,12 @@ plugins {
     //id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
+    id("xyz.jpenilla.run-paper") version "2.0.0"
     id("io.papermc.paperweight.userdev") version "1.7.1" apply false
 }
 
 group = "me.lojosho"
-version = "0.3.3"
+version = "0.4.0"
 
 allprojects {
     apply(plugin = "java")
@@ -65,7 +66,7 @@ allprojects {
 
         // Included externally
         compileOnly("com.mojang:authlib:1.5.25")
-        compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:23.0.0")
         compileOnly("com.github.oraxen:oraxen:1.160.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.2.5")
@@ -105,8 +106,6 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
-    implementation(project(path = ":v1_18_R2", configuration = "reobf"))
-    implementation(project(path = ":v1_19_R2", configuration = "reobf"))
     implementation(project(path = ":v1_19_R3", configuration = "reobf"))
     implementation(project(path = ":v1_20_R1", configuration = "reobf"))
     implementation(project(path = ":v1_20_R2", configuration = "reobf"))
@@ -120,6 +119,11 @@ tasks {
         //options.release.set(17)
     }
 
+    runServer {
+        dependsOn(shadowJar)
+        minecraftVersion("1.20.6")
+    }
+
     javadoc {
         options.encoding = Charsets.UTF_8.name()
     }
@@ -130,8 +134,6 @@ tasks {
     }
 
     shadowJar {
-        dependsOn(":v1_18_R2:reobfJar")
-        dependsOn(":v1_19_R2:reobfJar")
         dependsOn(":v1_19_R3:reobfJar")
         dependsOn(":v1_20_R1:reobfJar")
         dependsOn(":v1_20_R2:reobfJar")
@@ -157,10 +159,6 @@ tasks {
 
     build {
         dependsOn(shadowJar)
-    }
-
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
