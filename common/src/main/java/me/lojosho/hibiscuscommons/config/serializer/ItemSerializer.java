@@ -102,8 +102,11 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
 
         if (!enchantsNode.virtual()) {
             for (ConfigurationNode enchantNode : enchantsNode.childrenMap().values()) {
-                if (Enchantment.getByKey(NamespacedKey.minecraft(enchantNode.key().toString())) == null) continue;
-                itemMeta.addEnchant(Enchantment.getByKey(NamespacedKey.minecraft(enchantNode.key().toString())), enchantNode.getInt(1), true);
+                String enchantName = enchantNode.key().toString().toLowerCase();
+                NamespacedKey key = NamespacedKey.minecraft(enchantName);
+                Enchantment enchant = Enchantment.getByKey(key);
+                if (enchant == null) continue;
+                itemMeta.addEnchant(enchant, enchantNode.getInt(1), true);
             }
         }
 
