@@ -5,6 +5,7 @@ import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
 import dev.lone.itemsadder.api.Events.PlayerEmoteEndEvent;
 import dev.lone.itemsadder.api.Events.PlayerEmotePlayEvent;
 import me.lojosho.hibiscuscommons.api.events.HibiscusHookReload;
+import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerEmoteEndEvent;
 import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerEmotePlayEvent;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import me.lojosho.hibiscuscommons.hooks.HookFlag;
@@ -57,7 +58,7 @@ public class HookItemAdder extends Hook {
 
     @EventHandler
     public void onPlayerEmoteEnd(PlayerEmoteEndEvent event) {
-        HibiscusPlayerEmotePlayEvent newEvent = new HibiscusPlayerEmotePlayEvent(this, event.getPlayer(), event.getEmoteName());
+        HibiscusPlayerEmoteEndEvent newEvent = new HibiscusPlayerEmoteEndEvent(this, event.getPlayer(), event.getEmoteName());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 
