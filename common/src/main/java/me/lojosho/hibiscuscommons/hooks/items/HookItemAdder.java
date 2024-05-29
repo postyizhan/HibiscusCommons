@@ -2,7 +2,10 @@ package me.lojosho.hibiscuscommons.hooks.items;
 
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.Events.ItemsAdderLoadDataEvent;
+import dev.lone.itemsadder.api.Events.PlayerEmoteEndEvent;
+import dev.lone.itemsadder.api.Events.PlayerEmotePlayEvent;
 import me.lojosho.hibiscuscommons.api.events.HibiscusHookReload;
+import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerEmotePlayEvent;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import me.lojosho.hibiscuscommons.hooks.HookFlag;
 import org.bukkit.Bukkit;
@@ -42,6 +45,19 @@ public class HookItemAdder extends Hook {
         HibiscusHookReload.ReloadType reloadType = enabled ? HibiscusHookReload.ReloadType.RELOAD : HibiscusHookReload.ReloadType.INITIAL;
         this.enabled = true;
         HibiscusHookReload newEvent = new HibiscusHookReload(this, reloadType);
+        Bukkit.getPluginManager().callEvent(newEvent);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerEmotePlay(PlayerEmotePlayEvent event) {
+        HibiscusPlayerEmotePlayEvent newEvent = new HibiscusPlayerEmotePlayEvent(this, event.getPlayer(), event.getEmoteName());
+        Bukkit.getPluginManager().callEvent(newEvent);
+        if (newEvent.isCancelled()) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerEmoteEnd(PlayerEmoteEndEvent event) {
+        HibiscusPlayerEmotePlayEvent newEvent = new HibiscusPlayerEmotePlayEvent(this, event.getPlayer(), event.getEmoteName());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
 
