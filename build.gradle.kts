@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.4.4"
+version = "0.4.5"
 
 allprojects {
     apply(plugin = "java")
@@ -67,18 +67,17 @@ allprojects {
         // Included externally
         compileOnly("com.mojang:authlib:1.5.25")
         compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
-        compileOnly("org.jetbrains:annotations:23.0.0")
+        compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("com.github.oraxen:oraxen:1.160.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.2.5")
         compileOnly("com.mineinabyss:geary-papermc:0.27.0")
-        compileOnly("it.unimi.dsi:fastutil:8.5.11")
+        compileOnly("it.unimi.dsi:fastutil:8.5.13")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
         compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
         compileOnly("com.willfp:eco:6.67.2")
-        compileOnly("me.clip:placeholderapi:2.11.5")
-        compileOnly("it.unimi.dsi:fastutil:8.5.11")
+        compileOnly("me.clip:placeholderapi:2.11.6")
         compileOnly("LibsDisguises:LibsDisguises:10.0.21") {
             exclude("org.spigotmc", "spigot")
         }
@@ -86,9 +85,9 @@ allprojects {
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
 
         // Lombok <3
-        annotationProcessor("org.projectlombok:lombok:1.18.32")
-        testCompileOnly("org.projectlombok:lombok:1.18.32")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+        annotationProcessor("org.projectlombok:lombok:1.18.34")
+        testCompileOnly("org.projectlombok:lombok:1.18.34")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.17.0")
