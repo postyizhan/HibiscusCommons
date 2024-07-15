@@ -69,7 +69,7 @@ allprojects {
         compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("com.github.oraxen:oraxen:1.160.0")
-        compileOnly("com.github.LoneDev6:API-ItemsAdder:3.2.5")
+        compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.27.0")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
