@@ -35,7 +35,7 @@ public class HookItemAdder extends Hook {
         if (enabled) {
             CustomStack stack = CustomStack.getInstance(itemId);
             if (stack == null) return null;
-            return stack.getItemStack();
+            return stack.getItemStack().clone();
         } else {
             return new ItemStack(Material.AIR);
         }
