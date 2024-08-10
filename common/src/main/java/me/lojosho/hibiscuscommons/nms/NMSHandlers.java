@@ -17,6 +17,7 @@ public class NMSHandlers {
         put("1.20.4", "v1_20_R3");
         put("1.20.6", "v1_20_R4");
         put("1.21", "v1_21_R1");
+        put("1.21.1", "v1_21_R1");
     }};
     private static NMSHandler handler;
     @Getter
