@@ -34,7 +34,7 @@ public class Hooks {
     private static final HookEco ECO_ITEMS_HOOK = new HookEco();
     private static final HookPlaceholderAPI PAPI_HOOK = new HookPlaceholderAPI();
     private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
-
+    private static final HookGSit GSIT_HOOK = new HookGSit();
 
     public static Hook getHook(@NotNull String id) {
         return hooks.get(id.toLowerCase());
