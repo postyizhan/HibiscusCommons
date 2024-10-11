@@ -126,7 +126,8 @@ tasks {
 
     runServer {
         dependsOn(shadowJar)
-        minecraftVersion("1.20.6")
+        dependsOn(jar)
+        minecraftVersion("1.21.1")
     }
 
     javadoc {
