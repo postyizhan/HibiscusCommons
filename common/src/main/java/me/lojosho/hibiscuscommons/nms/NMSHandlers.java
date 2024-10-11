@@ -6,11 +6,11 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class NMSHandlers {
 
-    private static final HashMap<String, String> VERSION_MAP = new HashMap<>() {{
+    private static final LinkedHashMap<String, String> VERSION_MAP = new LinkedHashMap <>() {{
         put("1.19.4", "v1_19_R3");
         put("1.20.1", "v1_20_R1");
         put("1.20.2", "v1_20_R2");
@@ -43,6 +43,23 @@ public class NMSHandlers {
         final String bukkitVersion = Bukkit.getServer().getBukkitVersion();
         String minecraftVersion = bukkitVersion.substring(0, bukkitVersion.indexOf('-'));
         String packageVersion = VERSION_MAP.get(minecraftVersion);
+
+        if (packageVersion == null) {
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("An error occurred while trying to detect the version of the server.");
+            HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Bukkit Version: " + bukkitVersion);
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Minecraft Version: " + minecraftVersion);
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Package Version: " + packageVersion);
+            HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Supported versions:");
+            for (String supportedVersion : VERSION_MAP.keySet()) {
+                HibiscusCommonsPlugin.getInstance().getLogger().severe("  - " + supportedVersion);
+            }
+            HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Please report this issue to the developer.");
+            Bukkit.getServer().getPluginManager().disablePlugin(HibiscusCommonsPlugin.getInstance());
+            return;
+        }
 
         for (String selectedVersion : VERSION_MAP.values()) {
             if (!selectedVersion.contains(packageVersion)) {
