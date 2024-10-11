@@ -3,12 +3,11 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 plugins {
     id("java")
     id("maven-publish")
-    id("io.github.goooler.shadow") version "8.1.7" // Temp shadow repo with fix
-    //id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.3"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("io.papermc.paperweight.userdev") version "1.7.3" apply false
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
-    id("xyz.jpenilla.run-paper") version "2.0.0"
-    id("io.papermc.paperweight.userdev") version "1.7.1" apply false
 }
 
 group = "me.lojosho"
@@ -25,7 +24,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots")
 
         // UpdateChecker
-        maven("https://hub.jeff-media.com/nexus/repository/jeff-media-public/")
+        maven("https://repo.jeff-media.com/public")
 
         // Geary & Backup ProtocolLib repo
         maven("https://repo.mineinabyss.com/releases/")
@@ -52,6 +51,12 @@ allprojects {
         // ProtocolLib
         maven("https://repo.dmulloy2.net/repository/public/")
 
+        // Oraxen
+        maven("https://repo.oraxen.com/releases")
+
+        // Needed for brigadier for dependencies (I
+        maven("https://libraries.minecraft.net/")
+
         // MythicMobs
         maven {
             url = uri("https://mvn.lumine.io/repository/maven-public")
@@ -68,7 +73,7 @@ allprojects {
         compileOnly("com.mojang:authlib:1.5.25")
         compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:24.1.0")
-        compileOnly("com.github.oraxen:oraxen:1.160.0")
+        compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.27.0")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
@@ -81,7 +86,7 @@ allprojects {
         compileOnly("LibsDisguises:LibsDisguises:10.0.21") {
             exclude("org.spigotmc", "spigot")
         }
-        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.5")
+        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
 
         // Lombok <3
@@ -92,7 +97,7 @@ allprojects {
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.17.0")
         compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
-        compileOnly("net.kyori:adventure-platform-bukkit:4.3.3")
+        compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
         compileOnly("org.apache.commons:commons-lang3:3.14.0")
 
         // Shaded Dependencies
@@ -195,7 +200,7 @@ bukkit {
     libraries = listOf(
         "net.kyori:adventure-api:4.17.0",
         "net.kyori:adventure-text-minimessage:4.17.0",
-        "net.kyori:adventure-platform-bukkit:4.3.3",
+        "net.kyori:adventure-platform-bukkit:4.3.4",
         "org.apache.commons:commons-lang3:3.14.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
