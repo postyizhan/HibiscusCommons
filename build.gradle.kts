@@ -3,10 +3,10 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 plugins {
     id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "8.3.3"
+    id("com.gradleup.shadow") version "8.3.4"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.papermc.paperweight.userdev") version "1.7.3" apply false
+    id("io.papermc.paperweight.userdev") version "1.7.4" apply false
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
 }
 
@@ -112,12 +112,12 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
-    //implementation(project(path = ":v1_19_R3", configuration = "reobf"))
-    //implementation(project(path = ":v1_20_R1", configuration = "reobf"))
-    //implementation(project(path = ":v1_20_R2", configuration = "reobf"))
-    //implementation(project(path = ":v1_20_R3", configuration = "reobf"))
-    //implementation(project(path = ":v1_20_R4", configuration = "reobf"))
+    implementation(project(path = ":v1_20_R1", configuration = "reobf"))
+    implementation(project(path = ":v1_20_R2", configuration = "reobf"))
+    implementation(project(path = ":v1_20_R3", configuration = "reobf"))
+    implementation(project(path = ":v1_20_R4", configuration = "reobf"))
     implementation(project(path = ":v1_21_R1", configuration = "reobf"))
+    implementation(project(path = ":v1_21_R2", configuration = "reobf"))
 }
 
 tasks {
@@ -142,12 +142,12 @@ tasks {
     }
 
     shadowJar {
-        //dependsOn(":v1_19_R3:reobfJar")
-        //dependsOn(":v1_20_R1:reobfJar")
-        //dependsOn(":v1_20_R2:reobfJar")
-        //dependsOn(":v1_20_R3:reobfJar")
-        //dependsOn(":v1_20_R4:reobfJar")
+        dependsOn(":v1_20_R1:reobfJar")
+        dependsOn(":v1_20_R2:reobfJar")
+        dependsOn(":v1_20_R3:reobfJar")
+        dependsOn(":v1_20_R4:reobfJar")
         dependsOn(":v1_21_R1:reobfJar")
+        dependsOn(":v1_21_R2:reobfJar")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")
