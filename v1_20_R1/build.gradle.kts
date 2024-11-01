@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    pluginRemapper("net.fabricmc:tiny-remapper:0.10.3:fat")
     implementation(project(":common"))
 }
 
@@ -16,7 +17,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()

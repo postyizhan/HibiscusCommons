@@ -83,14 +83,16 @@ allprojects {
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
         compileOnly("com.willfp:eco:6.67.2")
         compileOnly("me.clip:placeholderapi:2.11.6")
-        compileOnly("LibsDisguises:LibsDisguises:10.0.21") {
+        compileOnly("LibsDisguises:LibsDisguises:10.0.44") {
             exclude("org.spigotmc", "spigot")
         }
         compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
+        compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.34")
+        compileOnly("org.projectlombok:lombok:1.18.34")
         testCompileOnly("org.projectlombok:lombok:1.18.34")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
