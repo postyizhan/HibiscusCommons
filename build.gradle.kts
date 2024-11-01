@@ -75,7 +75,7 @@ allprojects {
         compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
-        compileOnly("com.mineinabyss:geary-papermc:0.27.0")
+        compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
@@ -110,11 +110,11 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
-    implementation(project(path = ":v1_19_R3", configuration = "reobf"))
-    implementation(project(path = ":v1_20_R1", configuration = "reobf"))
-    implementation(project(path = ":v1_20_R2", configuration = "reobf"))
-    implementation(project(path = ":v1_20_R3", configuration = "reobf"))
-    implementation(project(path = ":v1_20_R4", configuration = "reobf"))
+    //implementation(project(path = ":v1_19_R3", configuration = "reobf"))
+    //implementation(project(path = ":v1_20_R1", configuration = "reobf"))
+    //implementation(project(path = ":v1_20_R2", configuration = "reobf"))
+    //implementation(project(path = ":v1_20_R3", configuration = "reobf"))
+    //implementation(project(path = ":v1_20_R4", configuration = "reobf"))
     implementation(project(path = ":v1_21_R1", configuration = "reobf"))
 }
 
@@ -140,11 +140,11 @@ tasks {
     }
 
     shadowJar {
-        dependsOn(":v1_19_R3:reobfJar")
-        dependsOn(":v1_20_R1:reobfJar")
-        dependsOn(":v1_20_R2:reobfJar")
-        dependsOn(":v1_20_R3:reobfJar")
-        dependsOn(":v1_20_R4:reobfJar")
+        //dependsOn(":v1_19_R3:reobfJar")
+        //dependsOn(":v1_20_R1:reobfJar")
+        //dependsOn(":v1_20_R2:reobfJar")
+        //dependsOn(":v1_20_R3:reobfJar")
+        //dependsOn(":v1_20_R4:reobfJar")
         dependsOn(":v1_21_R1:reobfJar")
         mergeServiceFiles()
 
