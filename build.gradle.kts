@@ -3,10 +3,10 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 plugins {
     id("java")
     id("maven-publish")
-    id("com.gradleup.shadow") version "8.3.3"
+    id("com.gradleup.shadow") version "8.3.4"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.papermc.paperweight.userdev") version "1.7.3" apply false
+    id("io.papermc.paperweight.userdev") version "1.7.4" apply false
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
 }
 
@@ -75,7 +75,7 @@ allprojects {
         compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
-        compileOnly("com.mineinabyss:geary-papermc:0.27.0")
+        compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
@@ -83,14 +83,16 @@ allprojects {
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
         compileOnly("com.willfp:eco:6.67.2")
         compileOnly("me.clip:placeholderapi:2.11.6")
-        compileOnly("LibsDisguises:LibsDisguises:10.0.21") {
+        compileOnly("LibsDisguises:LibsDisguises:10.0.44") {
             exclude("org.spigotmc", "spigot")
         }
         compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
+        compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.34")
+        compileOnly("org.projectlombok:lombok:1.18.34")
         testCompileOnly("org.projectlombok:lombok:1.18.34")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
@@ -110,12 +112,12 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
-    implementation(project(path = ":v1_19_R3", configuration = "reobf"))
     implementation(project(path = ":v1_20_R1", configuration = "reobf"))
     implementation(project(path = ":v1_20_R2", configuration = "reobf"))
     implementation(project(path = ":v1_20_R3", configuration = "reobf"))
     implementation(project(path = ":v1_20_R4", configuration = "reobf"))
     implementation(project(path = ":v1_21_R1", configuration = "reobf"))
+    implementation(project(path = ":v1_21_R2", configuration = "reobf"))
 }
 
 tasks {
@@ -140,12 +142,12 @@ tasks {
     }
 
     shadowJar {
-        dependsOn(":v1_19_R3:reobfJar")
         dependsOn(":v1_20_R1:reobfJar")
         dependsOn(":v1_20_R2:reobfJar")
         dependsOn(":v1_20_R3:reobfJar")
         dependsOn(":v1_20_R4:reobfJar")
         dependsOn(":v1_21_R1:reobfJar")
+        dependsOn(":v1_21_R2:reobfJar")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")

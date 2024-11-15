@@ -1,4 +1,4 @@
-package me.lojosho.hibiscuscommons.nms.v1_19_R3;
+package me.lojosho.hibiscuscommons.nms.v1_21_R2;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.protocol.Packet;
@@ -13,11 +13,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R3.CraftEquipmentSlot;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_19_R3.scoreboard.CraftScoreboard;
+import org.bukkit.craftbukkit.CraftEquipmentSlot;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
