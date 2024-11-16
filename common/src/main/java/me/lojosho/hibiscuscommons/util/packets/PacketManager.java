@@ -223,7 +223,7 @@ public class PacketManager {
             Player player,
             int slot
     ) {
-        NMSHandlers.getHandler().slotUpdate(player, slot);
+        NMSHandlers.getHandler().getPacketHandler().sendSlotUpdate(player, slot);
     }
 
     public static void equipmentSlotUpdate(
@@ -232,7 +232,7 @@ public class PacketManager {
             ItemStack item,
             List<Player> sendTo
     ) {
-        NMSHandlers.getHandler().equipmentSlotUpdate(entityId, slot, item, sendTo);
+        NMSHandlers.getHandler().getPacketHandler().sendEquipmentSlotUpdate(entityId, slot, item, sendTo);
     }
 
     public static void equipmentSlotUpdate(
@@ -240,7 +240,7 @@ public class PacketManager {
             HashMap<EquipmentSlot, ItemStack> equipment,
             List<Player> sendTo
     ) {
-        NMSHandlers.getHandler().equipmentSlotUpdate(entityId, equipment, sendTo);
+        NMSHandlers.getHandler().getPacketHandler().sendEquipmentSlotUpdate(entityId, equipment, sendTo);
     }
 
     private static List<Player> getNearbyPlayers(Location location, int distance) {

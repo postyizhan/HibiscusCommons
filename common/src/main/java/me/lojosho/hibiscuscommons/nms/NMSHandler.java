@@ -1,44 +1,22 @@
 package me.lojosho.hibiscuscommons.nms;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
+import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.List;
+public class NMSHandler {
 
-public interface NMSHandler {
+    private static NMSHandler instance;
+    @Getter
+    private NMSUtils utilHandler;
+    @Getter
+    private NMSPackets packetHandler;
 
-    int getNextEntityId();
+    public NMSHandler(NMSUtils utilHandler, NMSPackets packetHandler) {
+        if (instance != null) {
+            throw new IllegalStateException("NMSHandler is already initialized.");
+        }
+        this.utilHandler = utilHandler;
+        this.packetHandler = packetHandler;
 
-    Entity getEntity(int entityId);
-
-    void slotUpdate(
-            Player player,
-            int slot
-    );
-
-    void equipmentSlotUpdate(
-            int entityId,
-            org.bukkit.inventory.EquipmentSlot slot,
-            ItemStack item,
-            List<Player> sendTo
-    );
-
-    void equipmentSlotUpdate(
-            int entityId,
-            HashMap<EquipmentSlot, ItemStack> equipment,
-            List<Player> sendTo
-    );
-
-    void hideNPCName(
-            Player player,
-            String NPCName
-    );
-
-    default boolean getSupported () {
-        return false;
+        instance = this;
     }
-
 }

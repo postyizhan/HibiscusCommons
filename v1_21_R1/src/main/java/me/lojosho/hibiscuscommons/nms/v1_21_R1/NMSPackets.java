@@ -1,20 +1,17 @@
-package me.lojosho.hibiscuscommons.nms.v1_21_R2;
+package me.lojosho.hibiscuscommons.nms.v1_21_R1;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
@@ -26,32 +23,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class NMSHandler implements me.lojosho.hibiscuscommons.nms.NMSHandler {
-
-
-    @Override
-    public int getNextEntityId() {
-        return net.minecraft.world.entity.Entity.nextEntityId();
-    }
+public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.nms.NMSPackets {
 
     @Override
-    public org.bukkit.entity.Entity getEntity(int entityId) {
-        net.minecraft.world.entity.Entity entity = getNMSEntity(entityId);
-        if (entity == null) return null;
-        return entity.getBukkitEntity();
-    }
-
-    private net.minecraft.world.entity.Entity getNMSEntity(int entityId) {
-        for (ServerLevel world : ((CraftServer) Bukkit.getServer()).getHandle().getServer().getAllLevels()) {
-            net.minecraft.world.entity.Entity entity = world.getEntity(entityId);
-            if (entity == null) continue;
-            return entity;
-        }
-        return null;
-    }
-
-    @Override
-    public void equipmentSlotUpdate(
+    public void sendEquipmentSlotUpdate(
             int entityId,
             org.bukkit.inventory.EquipmentSlot slot,
             ItemStack item,
@@ -76,7 +51,7 @@ public class NMSHandler implements me.lojosho.hibiscuscommons.nms.NMSHandler {
     }
 
     @Override
-    public void equipmentSlotUpdate(
+    public void sendEquipmentSlotUpdate(
             int entityId,
             HashMap<org.bukkit.inventory.EquipmentSlot, ItemStack> equipment,
             List<Player> sendTo
@@ -98,7 +73,7 @@ public class NMSHandler implements me.lojosho.hibiscuscommons.nms.NMSHandler {
 
 
     @Override
-    public void slotUpdate(
+    public void sendSlotUpdate(
             Player player,
             int slot
     ) {
@@ -120,9 +95,9 @@ public class NMSHandler implements me.lojosho.hibiscuscommons.nms.NMSHandler {
     }
 
     @Override
-    public void hideNPCName(Player player, String NPCName) {
+    public void sendScoreboardHideNamePacket(Player player, String name) {
         //Creating the team
-        PlayerTeam team = new PlayerTeam(((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle(), NPCName);
+        PlayerTeam team = new PlayerTeam(((CraftScoreboard) Bukkit.getScoreboardManager().getMainScoreboard()).getHandle(), name);
 
         //Setting name visibility
         team.setNameTagVisibility(Team.Visibility.NEVER);
@@ -135,19 +110,7 @@ public class NMSHandler implements me.lojosho.hibiscuscommons.nms.NMSHandler {
         sendPacket(player, createTeamPacket);
         //Adding players to the team (You have to use the NPC's name, and add it to a list)
         ClientboundSetPlayerTeamPacket createPlayerTeamPacket = ClientboundSetPlayerTeamPacket.createMultiplePlayerPacket(team, new ArrayList<String>() {{
-            add(NPCName);
+            add(name);
         }}, ClientboundSetPlayerTeamPacket.Action.ADD);
         sendPacket(player, createPlayerTeamPacket);
-    }
-
-    public void sendPacket(Player player, Packet packet) {
-        ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
-        ServerPlayerConnection connection = serverPlayer.connection;
-        connection.send(packet);
-    }
-
-    @Override
-    public boolean getSupported() {
-        return true;
-    }
-}
+    }}

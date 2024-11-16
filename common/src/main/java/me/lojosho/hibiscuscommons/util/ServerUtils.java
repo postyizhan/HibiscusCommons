@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class ServerUtils {
 
     public static int getNextEntityId() {
-        return NMSHandlers.getHandler().getNextEntityId();
+        return NMSHandlers.getHandler().getUtilHandler().getNextEntityId();
     }
 
     @Nullable
