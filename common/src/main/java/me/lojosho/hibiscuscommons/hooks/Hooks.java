@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class Hooks {
 
     private static final HashMap<String, Hook> hooks = new HashMap<>();
+    private static final HookNexo NEXO_HOOK = new HookNexo();
     private static final HookOraxen ORAXEN_HOOK = new HookOraxen();
     private static final HookItemAdder ITEMADDER_HOOK = new HookItemAdder();
     private static final HookGeary GEARY_HOOK = new HookGeary();
