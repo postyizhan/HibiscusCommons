@@ -26,6 +26,8 @@ allprojects {
         // UpdateChecker
         maven("https://repo.jeff-media.com/public")
 
+        maven("https://repo.nexomc.com/snapshots/")
+
         // Geary & Backup ProtocolLib repo
         maven("https://repo.mineinabyss.com/releases/")
         maven("https://repo.mineinabyss.com/snapshots/")
@@ -74,6 +76,7 @@ allprojects {
         compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("io.th0rgal:oraxen:1.182.0")
+        compileOnly("com.nexomc:nexo:0.1.0-dev.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
@@ -193,7 +196,8 @@ bukkit {
         "LibsDisguises",
         "Denizen",
         "MMOItems",
-        "Eco"
+        "Eco",
+        "Nexo"
     )
     version = "${project.version}"
     loadBefore = listOf(
