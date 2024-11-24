@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.5.0"
+version = "0.5.1"
 
 allprojects {
     apply(plugin = "java")
@@ -26,6 +26,7 @@ allprojects {
         // UpdateChecker
         maven("https://repo.jeff-media.com/public")
 
+        // Nexo
         maven("https://repo.nexomc.com/snapshots/")
 
         // Geary & Backup ProtocolLib repo

@@ -3,8 +3,10 @@ package me.lojosho.hibiscuscommons.hooks.items;
 import com.nexomc.nexo.api.NexoItems;
 import com.nexomc.nexo.api.events.NexoItemsLoadedEvent;
 import com.nexomc.nexo.items.ItemBuilder;
+import me.lojosho.hibiscuscommons.api.events.HibiscusHookReload;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import me.lojosho.hibiscuscommons.hooks.HookFlag;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class HookNexo extends Hook {
-    private boolean loaded = false;
+    private boolean enabled = false;
     public HookNexo() {
         super("nexo", HookFlag.ITEM_SUPPORT);
     }
@@ -25,7 +27,7 @@ public class HookNexo extends Hook {
      */
     @Override
     public ItemStack getItem(@NotNull String itemId) {
-        return NexoItems.optionalItemFromId(itemId).map(ItemBuilder::build).orElse(loaded ? new ItemStack(Material.AIR) : null);
+        return NexoItems.optionalItemFromId(itemId).map(ItemBuilder::build).orElse(enabled ? new ItemStack(Material.AIR) : null);
     }
 
     @Override
@@ -37,6 +39,9 @@ public class HookNexo extends Hook {
 
     @EventHandler
     public void onLoadItems(NexoItemsLoadedEvent event) {
-        loaded = true;
+        HibiscusHookReload.ReloadType reloadType = enabled ? HibiscusHookReload.ReloadType.RELOAD : HibiscusHookReload.ReloadType.INITIAL;
+        this.enabled = true;
+        HibiscusHookReload newEvent = new HibiscusHookReload(this, reloadType);
+        Bukkit.getPluginManager().callEvent(newEvent);
     }
 }
