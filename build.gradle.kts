@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.5.1"
+version = "0.5.2-${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -303,5 +303,17 @@ class PublishData(private val project: Project) {
 
         fun append(name: String, appendCommit: Boolean, commitHash: String): String =
             name.plus(append).plus(if (appendCommit && addCommit) "-".plus(commitHash) else "")
+    }
+}
+
+fun getGitCommitHash(): String {
+    return try {
+        val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+            .redirectErrorStream(true)
+            .start()
+
+        process.inputStream.bufferedReader().use { it.readLine().trim() }
+    } catch (e: Exception) {
+        "unknown" // Fallback if Git is not available or an error occurs
     }
 }
