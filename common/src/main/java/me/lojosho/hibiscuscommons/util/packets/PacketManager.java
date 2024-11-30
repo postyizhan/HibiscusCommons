@@ -57,10 +57,7 @@ public class PacketManager {
             int passengerId,
             @NotNull List<Player> sendTo
     ) {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.MOUNT);
-        packet.getIntegers().write(0, mountId);
-        packet.getIntegerArrays().write(0, new int[]{passengerId});
-        for (Player p : sendTo) sendPacket(p, packet);
+        NMSHandlers.getHandler().getPacketHandler().sendMountPacket(mountId, new int[]{passengerId}, sendTo);
     }
 
     public static void sendLookPacket(
@@ -101,6 +98,9 @@ public class PacketManager {
     ) {
         float ROTATION_FACTOR = 256.0F / 360.0F;
         float yaw2 = yaw * ROTATION_FACTOR;
+
+        NMSHandlers.getHandler().getPacketHandler().sendRotationPacket(entityId, yaw2, onGround, sendTo);
+        /*
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_LOOK);
         packet.getIntegers().write(0, entityId);
         packet.getBytes().write(0, (byte) yaw2);
@@ -109,6 +109,8 @@ public class PacketManager {
         //Bukkit.getLogger().info("DEBUG: Yaw: " + (location.getYaw() * ROTATION_FACTOR) + " | Original Yaw: " + location.getYaw());
         packet.getBooleans().write(0, onGround);
         for (Player p : sendTo) sendPacket(p, packet);
+
+         */
     }
 
     public static void sendRidingPacket(
@@ -124,12 +126,15 @@ public class PacketManager {
             final int[] passengerIds,
             final @NotNull List<Player> sendTo
     ) {
+        NMSHandlers.getHandler().getPacketHandler().sendMountPacket(mountId, passengerIds, sendTo);
+        /*
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.MOUNT);
         packet.getIntegers().write(0, mountId);
         packet.getIntegerArrays().write(0, passengerIds);
         for (final Player p : sendTo) {
             sendPacket(p, packet);
         }
+         */
     }
 
     /**
@@ -172,12 +177,15 @@ public class PacketManager {
             final int entityId,
             final @NotNull List<Player> sendTo
     ) {
+        NMSHandlers.getHandler().getPacketHandler().sendLeashPacket(leashedEntity, entityId, sendTo);
+        /*
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.ATTACH_ENTITY);
         packet.getIntegers().write(0, leashedEntity);
         packet.getIntegers().write(1, entityId);
         for (final Player p : sendTo) {
             sendPacket(p, packet);
         }
+         */
     }
 
     /**
@@ -193,6 +201,14 @@ public class PacketManager {
             boolean onGround,
             final @NotNull List<Player> sendTo
     ) {
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        float yaw = location.getYaw();
+        float pitch = location.getPitch();
+        NMSHandlers.getHandler().getPacketHandler().sendTeleportPacket(entityId, x, y, z, yaw, pitch, onGround, sendTo);
+
+        /*
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_TELEPORT);
         packet.getIntegers().write(0, entityId);
         packet.getDoubles().write(0, location.getX());
@@ -204,6 +220,7 @@ public class PacketManager {
         for (final Player p : sendTo) {
             sendPacket(p, packet);
         }
+         */
     }
 
 

@@ -1,10 +1,10 @@
 package me.lojosho.hibiscuscommons.nms.v1_20_R4;
 
 import com.mojang.datafixers.util.Pair;
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,12 +18,52 @@ import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Constructor;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.nms.NMSPackets {
+
+    static Constructor<ClientboundSetPassengersPacket> passengerConstructor;
+    static Constructor<ClientboundSetEntityLinkPacket> linkConstructor;
+    static Constructor<ClientboundTeleportEntityPacket> teleportConstructor;
+    static Constructor<ClientboundSetCameraPacket> cameraConstructor;
+    static Constructor<ClientboundPlayerLookAtPacket> lookAtConstructor;
+    static {
+        try {
+            passengerConstructor = ClientboundSetPassengersPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            passengerConstructor.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            linkConstructor = ClientboundSetEntityLinkPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            linkConstructor.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            teleportConstructor = ClientboundTeleportEntityPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            teleportConstructor.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            cameraConstructor = ClientboundSetCameraPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            cameraConstructor.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            lookAtConstructor = ClientboundPlayerLookAtPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
+            lookAtConstructor.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void sendEquipmentSlotUpdate(
@@ -113,4 +153,73 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             add(name);
         }}, ClientboundSetPlayerTeamPacket.Action.ADD);
         sendPacket(player, createPlayerTeamPacket);
-    }}
+    }
+
+    @Override
+    public void sendMountPacket(int mountId, int[] passengerIds, List<Player> sendTo) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeInt(mountId);
+        byteBuf.writeVarIntArray(passengerIds);
+        try {
+            ClientboundSetPassengersPacket packet = passengerConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendLeashPacket(int leashEntity, int entityId, List<Player> sendTo) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeInt(leashEntity);
+        byteBuf.writeInt(entityId);
+        try {
+            ClientboundSetEntityLinkPacket packet = linkConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendTeleportPacket(
+            int entityId,
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch,
+            boolean onGround,
+            List<Player> sendTo
+    ) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeInt(entityId);
+        byteBuf.writeDouble(x);
+        byteBuf.writeDouble(y);
+        byteBuf.writeDouble(z);
+        byteBuf.writeByte((byte) (yaw * 256.0F / 360.0F));
+        byteBuf.writeByte((byte) (pitch * 256.0F / 360.0F));
+        byteBuf.writeBoolean(onGround);
+
+        try {
+            ClientboundTeleportEntityPacket packet = teleportConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendRotationPacket(int entityId, float yaw, boolean onGround, List<Player> sendTo) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeInt(entityId);
+        byteBuf.writeFloat(yaw);
+        byteBuf.writeBoolean(onGround);
+        try {
+            ClientboundPlayerLookAtPacket packet = lookAtConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
