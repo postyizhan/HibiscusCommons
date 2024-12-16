@@ -156,7 +156,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     @Override
     public void sendMountPacket(int mountId, int[] passengerIds, List<Player> sendTo) {
         FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeInt(mountId);
+        byteBuf.writeVarInt(mountId);
         byteBuf.writeVarIntArray(passengerIds);
         try {
             ClientboundSetPassengersPacket packet = passengerConstructor.newInstance(byteBuf);
