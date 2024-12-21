@@ -193,7 +193,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             List<Player> sendTo
     ) {
         FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeInt(entityId);
+        byteBuf.writeVarInt(entityId);
         byteBuf.writeDouble(x);
         byteBuf.writeDouble(y);
         byteBuf.writeDouble(z);
@@ -212,7 +212,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     @Override
     public void sendRotationPacket(int entityId, float yaw, boolean onGround, List<Player> sendTo) {
         FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeInt(entityId);
+        byteBuf.writeVarInt(entityId);
         byteBuf.writeFloat(yaw);
         byteBuf.writeBoolean(onGround);
         try {
