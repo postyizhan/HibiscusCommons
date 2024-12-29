@@ -222,4 +222,16 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void sendCameraPacket(int entityId, List<Player> sendTo) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeVarInt(entityId);
+        try {
+            ClientboundSetCameraPacket packet = cameraConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

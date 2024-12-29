@@ -147,9 +147,7 @@ public class PacketManager {
      * @param sendTo The players that will be sent this packet
      */
     public static void sendCameraPacket(final int entityId, @NotNull List<Player> sendTo) {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.CAMERA);
-        packet.getIntegers().write(0, entityId);
-        for (final Player p : sendTo) sendPacket(p, packet);
+        NMSHandlers.getHandler().getPacketHandler().sendCameraPacket(entityId, sendTo);
         MessagesUtil.sendDebugMessages(sendTo + " | " + entityId + " has had a camera packet on them!");
     }
 

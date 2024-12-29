@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Constructor;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -227,6 +226,18 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
         byteBuf.writeBoolean(onGround);
         try {
             ClientboundPlayerLookAtPacket packet = lookAtConstructor.newInstance(byteBuf);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCameraPacket(int entityId, List<Player> sendTo) {
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeVarInt(entityId);
+        try {
+            ClientboundSetCameraPacket packet = cameraConstructor.newInstance(byteBuf);
             for (Player p : sendTo) sendPacket(p, packet);
         } catch (Exception e) {
             e.printStackTrace();

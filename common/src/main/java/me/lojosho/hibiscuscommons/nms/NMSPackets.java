@@ -49,4 +49,6 @@ public interface NMSPackets {
     );
 
     void sendRotationPacket(int entityId, float yaw, boolean onGround, List<Player> sendTo);
+
+    void sendCameraPacket(int entityId, List<Player> sendTo);
 }
