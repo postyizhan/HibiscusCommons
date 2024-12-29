@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.5.2-${getGitCommitHash()}"
+version = "0.5.2${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -74,8 +74,8 @@ allprojects {
 
         // Included externally
         compileOnly("com.mojang:authlib:1.5.25")
-        compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
-        compileOnly("org.jetbrains:annotations:24.1.0")
+        compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+        compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.nexomc:nexo:0.1.0-dev.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
@@ -307,13 +307,21 @@ class PublishData(private val project: Project) {
 }
 
 fun getGitCommitHash(): String {
-    return try {
-        val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
-            .redirectErrorStream(true)
-            .start()
+    var includeHash = true
+    val includeHashVariable = System.getenv("HMCC_INCLUDE_HASH")
 
-        process.inputStream.bufferedReader().use { it.readLine().trim() }
-    } catch (e: Exception) {
-        "unknown" // Fallback if Git is not available or an error occurs
+    if (!includeHashVariable.isNullOrEmpty()) includeHash = includeHashVariable.toBoolean()
+
+    if (includeHash) {
+        return try {
+            val process = ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+                .redirectErrorStream(true)
+                .start()
+
+            process.inputStream.bufferedReader().use { "-" + it.readLine().trim() }
+        } catch (e: Exception) {
+            "-unknown" // Fallback if Git is not available or an error occurs
+        }
     }
+    return ""
 }
