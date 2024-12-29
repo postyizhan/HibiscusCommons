@@ -19,6 +19,7 @@ public class NMSHandlers {
         put("1.21.1", "v1_21_R1");
         // 1.20.2 is not supported; was imminently bumped to 1.21.3
         put("1.21.3", "v1_21_R2");
+        put("1.21.4", "v1_21_R3");
     }};
 
     private static NMSHandler handler;

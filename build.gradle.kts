@@ -6,12 +6,12 @@ plugins {
     id("com.gradleup.shadow") version "8.3.4"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("io.papermc.paperweight.userdev") version "1.7.4" apply false
+    id("io.papermc.paperweight.userdev") apply false
     //id("io.papermc.hangar-publish-plugin") version "0.1.1"
 }
 
 group = "me.lojosho"
-version = "0.5.2${getGitCommitHash()}"
+version = "0.5.3${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -22,6 +22,9 @@ allprojects {
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
+
+        // Paper Repo
+        maven("https://papermc.io/repo/repository/maven-public/")
 
         // UpdateChecker
         maven("https://repo.jeff-media.com/public")
@@ -74,7 +77,8 @@ allprojects {
 
         // Included externally
         compileOnly("com.mojang:authlib:1.5.25")
-        compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+        //compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
+        compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.nexomc:nexo:0.1.0-dev.0")
