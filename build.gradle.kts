@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.5.4${getGitCommitHash()}"
+version = "0.5.5${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -78,10 +78,10 @@ allprojects {
         // Included externally
         compileOnly("com.mojang:authlib:1.5.25")
         //compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
-        compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
-        compileOnly("com.nexomc:nexo:0.1.0-dev.0")
+        compileOnly("com.nexomc:nexo:0.8.0-dev.8")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.13")
@@ -120,8 +120,6 @@ allprojects {
 
 dependencies {
     implementation(project(path = ":common"))
-    implementation(project(path = ":v1_20_R1", configuration = "reobf"))
-    implementation(project(path = ":v1_20_R2", configuration = "reobf"))
     implementation(project(path = ":v1_20_R3", configuration = "reobf"))
     implementation(project(path = ":v1_20_R4", configuration = "reobf"))
     implementation(project(path = ":v1_21_R1", configuration = "reobf"))
@@ -157,8 +155,6 @@ tasks {
     }
 
     shadowJar {
-        dependsOn(":v1_20_R1:reobfJar")
-        dependsOn(":v1_20_R2:reobfJar")
         dependsOn(":v1_20_R3:reobfJar")
         dependsOn(":v1_20_R4:reobfJar")
         dependsOn(":v1_21_R1:reobfJar")
