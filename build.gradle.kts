@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.5.5${getGitCommitHash()}"
+version = "0.6.0${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
