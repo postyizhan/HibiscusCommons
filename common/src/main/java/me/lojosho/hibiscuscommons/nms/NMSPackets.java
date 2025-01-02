@@ -17,6 +17,8 @@ import java.util.UUID;
 
 public interface NMSPackets {
 
+    static int POSITION_INTERPOLATION_DURATION = 2;
+
     void sendSlotUpdate(
             Player player,
             int slot

@@ -277,6 +277,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
                                         List<Player> sendTo) {
 
         List<SynchedEntityData.DataValue<?>> dataValues = new ArrayList<>();
+        dataValues.add(new SynchedEntityData.DataValue<>(10, EntityDataSerializers.INT, POSITION_INTERPOLATION_DURATION));
         dataValues.add(new SynchedEntityData.DataValue<>(11, EntityDataSerializers.VECTOR3, translation));
         dataValues.add(new SynchedEntityData.DataValue<>(12, EntityDataSerializers.VECTOR3, scale));
         dataValues.add(new SynchedEntityData.DataValue<>(13, EntityDataSerializers.QUATERNION, rotationLeft));
