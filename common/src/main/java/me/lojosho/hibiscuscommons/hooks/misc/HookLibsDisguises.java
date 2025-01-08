@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookLibsDisguises extends Hook {
     public HookLibsDisguises() {
         super("LibsDisguises");
+        setActive(true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

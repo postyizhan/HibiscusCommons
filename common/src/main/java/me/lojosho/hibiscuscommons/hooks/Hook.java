@@ -10,8 +10,11 @@ import org.jetbrains.annotations.Nullable;
  * Represents a hook into other minecraft plugins
  */
 public abstract class Hook implements Listener {
+
     private final String id;
+
     private boolean active = false;
+
     private boolean itemHook = false;
     private boolean entityHook = false;
 
@@ -27,6 +30,7 @@ public abstract class Hook implements Listener {
                     break;
             }
         }
+
         Hooks.addHook(this);
     }
 
@@ -35,10 +39,11 @@ public abstract class Hook implements Listener {
      *
      * @implNote By default, this method does nothing. It should be overridden by child classes to implement any necessary loading logic
      */
-    public void load() { }
+    public void load() {}
 
     /**
      * Gets an {@link ItemStack} that is associated with the provided id from the hooked plugin
+     *
      * @param itemId The id of the {@link ItemStack}
      * @return The {@link ItemStack} with the id provided. If an invalid id was provided or if the hook doesn't have any related {@link ItemStack}s then this will return null
      * @implNote By default, this method returns null. It should be overridden by child classes if you will to have your hook return a related {@link ItemStack}
@@ -60,6 +65,7 @@ public abstract class Hook implements Listener {
 
     /**
      * Gets whether this hook has been activated
+     *
      * @return true if this hook is active, false otherwise
      * @deprecated As of release 2.2.5+, replaced by {@link #isActive()}
      */
@@ -70,6 +76,7 @@ public abstract class Hook implements Listener {
 
     /**
      * Gets whether this hook has been activated
+     *
      * @return true if this hook is active, false otherwise
      * @since 2.2.5
      */
@@ -79,16 +86,21 @@ public abstract class Hook implements Listener {
 
     /**
      * Sets whether this hook is active
+     *
      * @param active true to activate the hook, false otherwise
      */
     public final void setActive(boolean active) {
         this.active = active;
+
+        if (active) {
+            Hooks.checkHookLoadingStatus();
+        }
     }
 
     /**
      * Whether the method {@link #getItem(String)} should return a non-null value
-     * @return true if {@link #getItem(String)} should return a non-null value, false otherwise
      *
+     * @return true if {@link #getItem(String)} should return a non-null value, false otherwise
      * @apiNote Even though this method returns true does not mean that {@link #getItem(String)} won't return null, rather if this returns false then {@link #getItem(String)} should return false everytime
      */
     public final boolean hasEnabledItemHook() {
@@ -101,6 +113,7 @@ public abstract class Hook implements Listener {
 
     /**
      * Sets whether the method {@link #getItem(String)} should return a non-null value
+     *
      * @param enabled true if {@link #getItem(String)} should return a non-null value, false otherwise
      */
     public final void setEnabledItemHook(boolean enabled) {

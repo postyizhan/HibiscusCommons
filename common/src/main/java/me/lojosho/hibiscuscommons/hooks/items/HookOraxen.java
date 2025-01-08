@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookOraxen extends Hook {
     public HookOraxen() {
         super("oraxen", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     /**

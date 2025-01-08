@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookDenizen extends Hook {
     public HookDenizen() {
         super("denizen", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     /**

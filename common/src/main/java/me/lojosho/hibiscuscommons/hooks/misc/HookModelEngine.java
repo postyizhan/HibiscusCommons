@@ -9,6 +9,7 @@ public class HookModelEngine extends Hook {
 
     public HookModelEngine() {
         super("ModelEngine");
+        setActive(true);
     }
 
     @Override
