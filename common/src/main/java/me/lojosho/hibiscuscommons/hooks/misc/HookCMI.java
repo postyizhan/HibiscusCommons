@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookCMI extends Hook {
     public HookCMI() {
         super("CMI");
+        setActive(true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

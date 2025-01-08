@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookPremiumVanish extends Hook {
     public HookPremiumVanish() {
         super("PremiumVanish");
+        setActive(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

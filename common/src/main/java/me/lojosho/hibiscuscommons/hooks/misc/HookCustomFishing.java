@@ -12,6 +12,7 @@ public class HookCustomFishing extends Hook {
 
     public HookCustomFishing() {
         super("CustomFishing");
+        setActive(true);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

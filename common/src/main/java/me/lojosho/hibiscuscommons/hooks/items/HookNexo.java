@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class HookNexo extends Hook {
-    private boolean enabled = false;
+
     public HookNexo() {
         super("nexo", HookFlag.ITEM_SUPPORT);
     }
@@ -27,7 +27,7 @@ public class HookNexo extends Hook {
      */
     @Override
     public ItemStack getItem(@NotNull String itemId) {
-        return NexoItems.optionalItemFromId(itemId).map(ItemBuilder::build).orElse(enabled ? new ItemStack(Material.AIR) : null);
+        return NexoItems.optionalItemFromId(itemId).map(ItemBuilder::build).orElse(isActive() ? new ItemStack(Material.AIR) : null);
     }
 
     @Override
@@ -39,9 +39,12 @@ public class HookNexo extends Hook {
 
     @EventHandler
     public void onLoadItems(NexoItemsLoadedEvent event) {
-        HibiscusHookReload.ReloadType reloadType = enabled ? HibiscusHookReload.ReloadType.RELOAD : HibiscusHookReload.ReloadType.INITIAL;
-        this.enabled = true;
-        HibiscusHookReload newEvent = new HibiscusHookReload(this, reloadType);
-        Bukkit.getPluginManager().callEvent(newEvent);
+        HibiscusHookReload.ReloadType type = HibiscusHookReload.ReloadType.RELOAD;
+        if (!isActive()) {
+            type = HibiscusHookReload.ReloadType.INITIAL;
+            setActive(true);
+        }
+
+        Bukkit.getPluginManager().callEvent(new HibiscusHookReload(this, type));
     }
 }

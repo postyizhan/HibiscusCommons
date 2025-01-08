@@ -3,6 +3,7 @@ package me.lojosho.hibiscuscommons.hooks;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
+import me.lojosho.hibiscuscommons.api.events.HibiscusHooksAllActiveEvent;
 import me.lojosho.hibiscuscommons.hooks.items.*;
 import me.lojosho.hibiscuscommons.hooks.misc.*;
 import me.lojosho.hibiscuscommons.hooks.placeholders.HookPlaceholderAPI;
@@ -15,10 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Hooks {
 
-    private static final HashMap<String, Hook> hooks = new HashMap<>();
+    private static final HashMap<String, Hook> HOOK_POOL = new HashMap<>();
+
     private static final HookNexo NEXO_HOOK = new HookNexo();
     private static final HookOraxen ORAXEN_HOOK = new HookOraxen();
     private static final HookItemAdder ITEMADDER_HOOK = new HookItemAdder();
@@ -37,16 +40,19 @@ public class Hooks {
     private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
     private static final HookGSit GSIT_HOOK = new HookGSit();
 
+    private static final Map<String, Hook> HOOKED = new HashMap<>();
+    private static boolean allHooksActive = false;
+
     public static Hook getHook(@NotNull String id) {
-        return hooks.get(id.toLowerCase());
+        return HOOK_POOL.get(id.toLowerCase());
     }
 
     public static boolean isItemHook(@NotNull String id) {
-        return hooks.containsKey(id.toLowerCase());
+        return HOOK_POOL.containsKey(id.toLowerCase());
     }
 
     public static void addHook(Hook hook) {
-        hooks.put(hook.getId().toLowerCase(), hook);
+        HOOK_POOL.put(hook.getId().toLowerCase(), hook);
     }
 
     public static void addPlaceholderAPI(PlaceholderExpansion expansion) {
@@ -63,14 +69,36 @@ public class Hooks {
     }
 
     public static void setup() {
-        for (Hook hook : hooks.values()) {
+        for (Hook hook : HOOK_POOL.values()) {
             if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null) {
                 HibiscusCommonsPlugin.getInstance().getServer().getPluginManager().registerEvents(hook, HibiscusCommonsPlugin.getInstance());
-                hook.setActive(true);
                 hook.load();
+
+                HOOKED.put(hook.getId(), hook);
+
                 HibiscusCommonsPlugin.getInstance().getLogger().info("Successfully hooked into " + hook.getId());
             }
         }
+    }
+
+    /**
+     * Checks if all hooked hooks are actually active
+     * so {@link HibiscusHooksAllActiveEvent} is called.
+     * This is an operation that occurs only once to allow plugins
+     * load their stuff successfully when all hooks are active.
+     */
+    static void checkHookLoadingStatus() {
+        if (allHooksActive) {
+            return;
+        }
+
+        if (!HOOKED.values().stream()
+                .allMatch(Hook::isActive)) {
+            return;
+        }
+
+        allHooksActive = true;
+        Bukkit.getPluginManager().callEvent(new HibiscusHooksAllActiveEvent());
     }
 
     @Nullable
@@ -93,7 +121,7 @@ public class Hooks {
     }
 
     public static String getStringItem(ItemStack itemStack) {
-        for (Hook hook : hooks.values()) {
+        for (Hook hook : HOOK_POOL.values()) {
             if (hook.isActive() && hook.hasEnabledItemHook()) {
                 String stringyItem = hook.getItemString(itemStack);
                 if (stringyItem == null) continue;
@@ -104,7 +132,7 @@ public class Hooks {
     }
 
     public static String getStringEntity(Entity entity) {
-        for (Hook hook : hooks.values()) {
+        for (Hook hook : HOOK_POOL.values()) {
             if (hook.isActive() && hook.hasEnabledEntityHook()) {
                 String stringyEntity = hook.getEntityString(entity);
                 if (stringyEntity != null) return hook.getId() + ":" + stringyEntity;

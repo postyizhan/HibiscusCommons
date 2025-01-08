@@ -12,6 +12,7 @@ public class HookGSit extends Hook {
 
     public HookGSit() {
         super("GSit");
+        setActive(true);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)

@@ -11,6 +11,7 @@ public class HookPlaceholderAPI extends Hook {
 
     public HookPlaceholderAPI() {
         super("PlaceholderAPI");
+        setActive(true);
     }
 
     public void registerPlaceholder(PlaceholderExpansion placeholderExpansion) {

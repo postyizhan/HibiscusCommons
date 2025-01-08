@@ -21,6 +21,7 @@ public class HookGeary extends Hook {
 
     public HookGeary() {
         super("geary", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     /**
