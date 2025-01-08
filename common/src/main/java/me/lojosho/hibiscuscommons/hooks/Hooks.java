@@ -3,7 +3,7 @@ package me.lojosho.hibiscuscommons.hooks;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
-import me.lojosho.hibiscuscommons.api.events.AllHooksActiveEvent;
+import me.lojosho.hibiscuscommons.api.events.HibiscusHooksAllActiveEvent;
 import me.lojosho.hibiscuscommons.hooks.items.*;
 import me.lojosho.hibiscuscommons.hooks.misc.*;
 import me.lojosho.hibiscuscommons.hooks.placeholders.HookPlaceholderAPI;
@@ -83,7 +83,7 @@ public class Hooks {
 
     /**
      * Checks if all hooked hooks are actually active
-     * so {@link AllHooksActiveEvent} is called.
+     * so {@link HibiscusHooksAllActiveEvent} is called.
      * This is an operation that occurs only once to allow plugins
      * load their stuff successfully when all hooks are active.
      */
@@ -98,7 +98,7 @@ public class Hooks {
         }
 
         allHooksActive = true;
-        Bukkit.getPluginManager().callEvent(new AllHooksActiveEvent());
+        Bukkit.getPluginManager().callEvent(new HibiscusHooksAllActiveEvent());
     }
 
     @Nullable

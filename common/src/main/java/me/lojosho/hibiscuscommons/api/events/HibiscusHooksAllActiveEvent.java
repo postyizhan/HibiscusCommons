@@ -4,7 +4,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class AllHooksActiveEvent extends Event {
+public class HibiscusHooksAllActiveEvent extends Event {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
