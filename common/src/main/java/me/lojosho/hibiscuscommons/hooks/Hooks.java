@@ -78,6 +78,8 @@ public class Hooks {
                 HibiscusCommonsPlugin.getInstance().getLogger().info("Successfully hooked into " + hook.getId());
             }
         }
+
+        checkHookLoadingStatus();
     }
 
     /**
