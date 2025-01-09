@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookItemAdder extends Hook {
 
     public HookItemAdder() {
-        super("itemsadder", HookFlag.ITEM_SUPPORT);
+        super("itemsadder", HookFlag.ITEM_SUPPORT, HookFlag.LATE_LOAD);
     }
 
     /**

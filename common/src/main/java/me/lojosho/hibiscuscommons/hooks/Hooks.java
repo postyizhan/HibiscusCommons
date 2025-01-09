@@ -7,6 +7,7 @@ import me.lojosho.hibiscuscommons.api.events.HibiscusHooksAllActiveEvent;
 import me.lojosho.hibiscuscommons.hooks.items.*;
 import me.lojosho.hibiscuscommons.hooks.misc.*;
 import me.lojosho.hibiscuscommons.hooks.placeholders.HookPlaceholderAPI;
+import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -16,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Hooks {
 
     private static final HashMap<String, Hook> HOOK_POOL = new HashMap<>();
-
     private static final HookNexo NEXO_HOOK = new HookNexo();
     private static final HookOraxen ORAXEN_HOOK = new HookOraxen();
     private static final HookItemAdder ITEMADDER_HOOK = new HookItemAdder();
@@ -40,7 +41,6 @@ public class Hooks {
     private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
     private static final HookGSit GSIT_HOOK = new HookGSit();
 
-    private static final Map<String, Hook> HOOKED = new HashMap<>();
     private static boolean allHooksActive = false;
 
     public static Hook getHook(@NotNull String id) {
@@ -72,9 +72,8 @@ public class Hooks {
         for (Hook hook : HOOK_POOL.values()) {
             if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null) {
                 HibiscusCommonsPlugin.getInstance().getServer().getPluginManager().registerEvents(hook, HibiscusCommonsPlugin.getInstance());
+                hook.setDetected(true);
                 hook.load();
-
-                HOOKED.put(hook.getId(), hook);
 
                 HibiscusCommonsPlugin.getInstance().getLogger().info("Successfully hooked into " + hook.getId());
             }
@@ -87,16 +86,26 @@ public class Hooks {
      * This is an operation that occurs only once to allow plugins
      * load their stuff successfully when all hooks are active.
      */
-    static void checkHookLoadingStatus() {
+    public static void checkHookLoadingStatus() {
         if (allHooksActive) {
             return;
         }
 
-        if (!HOOKED.values().stream()
-                .allMatch(Hook::isActive)) {
+        List<Hook> lateLoadHooks = HOOK_POOL.values().stream().filter(Hook::isDetected).filter(Hook::hasEnabledLateLoadHook).toList();
+        if (lateLoadHooks.isEmpty()) {
+            MessagesUtil.sendDebugMessages("Not awaiting anymore plugins... All hooks are now active.");
+            setAllHooksActive();
             return;
         }
 
+        List<Hook> activeLateHooks = lateLoadHooks.stream().filter(Hook::isActive).toList();
+        if (activeLateHooks.size() == lateLoadHooks.size()) {
+            MessagesUtil.sendDebugMessages("Match Hook");
+            setAllHooksActive();
+        }
+    }
+
+    private static void setAllHooksActive() {
         allHooksActive = true;
         Bukkit.getPluginManager().callEvent(new HibiscusHooksAllActiveEvent());
     }

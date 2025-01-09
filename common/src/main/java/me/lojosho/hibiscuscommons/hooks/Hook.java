@@ -13,10 +13,12 @@ public abstract class Hook implements Listener {
 
     private final String id;
 
+    private boolean detected = false;
     private boolean active = false;
 
     private boolean itemHook = false;
     private boolean entityHook = false;
+    private boolean lateLoadHook = false;
 
     public Hook(@NotNull String id, HookFlag... flags) {
         this.id = id;
@@ -27,6 +29,9 @@ public abstract class Hook implements Listener {
                     break;
                 case ENTITY_SUPPORT:
                     setEnabledEntityHook(true);
+                    break;
+                case LATE_LOAD:
+                    setEnabledLateLoadHook(true);
                     break;
             }
         }
@@ -92,9 +97,15 @@ public abstract class Hook implements Listener {
     public final void setActive(boolean active) {
         this.active = active;
 
-        if (active) {
-            Hooks.checkHookLoadingStatus();
-        }
+        if (hasEnabledLateLoadHook()) Hooks.checkHookLoadingStatus();
+    }
+
+    public final boolean isDetected() {
+        return this.detected;
+    }
+
+    public final void setDetected(boolean detected) {
+        this.detected = detected;
     }
 
     /**
@@ -111,6 +122,10 @@ public abstract class Hook implements Listener {
         return entityHook;
     }
 
+    public final boolean hasEnabledLateLoadHook() {
+        return lateLoadHook;
+    }
+
     /**
      * Sets whether the method {@link #getItem(String)} should return a non-null value
      *
@@ -122,6 +137,10 @@ public abstract class Hook implements Listener {
 
     public final void setEnabledEntityHook(boolean enabled) {
         entityHook = enabled;
+    }
+
+    public final void setEnabledLateLoadHook(boolean enabled) {
+        lateLoadHook = enabled;
     }
 
     public String getItemString(@NotNull ItemStack itemStack) {

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookNexo extends Hook {
 
     public HookNexo() {
-        super("nexo", HookFlag.ITEM_SUPPORT);
+        super("nexo", HookFlag.ITEM_SUPPORT, HookFlag.LATE_LOAD);
     }
 
     /**
