@@ -109,7 +109,7 @@ allprojects {
         compileOnly("net.kyori:adventure-api:4.18.0")
         compileOnly("net.kyori:adventure-text-minimessage:4.18.0")
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
-        compileOnly("org.apache.commons:commons-lang3:3.14.0")
+        compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
         implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT")
@@ -218,7 +218,7 @@ bukkit {
         "net.kyori:adventure-api:4.18.0",
         "net.kyori:adventure-text-minimessage:4.18.0",
         "net.kyori:adventure-platform-bukkit:4.3.4",
-        "org.apache.commons:commons-lang3:3.14.0"
+        "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
 }
