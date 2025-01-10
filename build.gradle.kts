@@ -100,10 +100,10 @@ allprojects {
         compileOnly("org.joml:joml:1.10.5")
 
         // Lombok <3
-        annotationProcessor("org.projectlombok:lombok:1.18.34")
-        compileOnly("org.projectlombok:lombok:1.18.34")
-        testCompileOnly("org.projectlombok:lombok:1.18.34")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+        annotationProcessor("org.projectlombok:lombok:1.18.36")
+        compileOnly("org.projectlombok:lombok:1.18.36")
+        testCompileOnly("org.projectlombok:lombok:1.18.36")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.18.0")
