@@ -97,7 +97,7 @@ allprojects {
         compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
         compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
-        compileOnly("org.joml:joml:1.10.5")
+        compileOnly("org.joml:joml:1.10.8")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.36")
