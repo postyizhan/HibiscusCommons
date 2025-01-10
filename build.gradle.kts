@@ -76,7 +76,7 @@ allprojects {
         compileOnly(fileTree("${project.rootDir}/lib") { include("*.jar") })
 
         // Included externally
-        compileOnly("com.mojang:authlib:1.5.25")
+        compileOnly("com.mojang:authlib:3.13.56")
         //compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
         compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
@@ -131,7 +131,6 @@ dependencies {
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        //options.release.set(17)
     }
 
     runServer {
