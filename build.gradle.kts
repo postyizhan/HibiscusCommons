@@ -89,7 +89,7 @@ allprojects {
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
         compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
-        compileOnly("com.willfp:eco:6.67.2")
+        compileOnly("com.willfp:eco:6.74.5")
         compileOnly("me.clip:placeholderapi:2.11.6")
         compileOnly("LibsDisguises:LibsDisguises:10.0.44") {
             exclude("org.spigotmc", "spigot")
