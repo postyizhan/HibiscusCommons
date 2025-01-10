@@ -84,7 +84,7 @@ allprojects {
         compileOnly("com.nexomc:nexo:0.8.0-dev.8")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
-        compileOnly("it.unimi.dsi:fastutil:8.5.13")
+        compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
         compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
