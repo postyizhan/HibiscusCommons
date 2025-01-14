@@ -127,7 +127,7 @@ public class Hooks {
         if (!isItemHook(split[0])) return null;
         Hook hook = getHook(split[0]);
         if (!hook.hasEnabledItemHook()) return null;
-        if (!hook.isActive()) return null;
+        if (!hook.isDetected() || !hook.isActive()) return null;
         return hook.getItem(split[1]);
     }
 
