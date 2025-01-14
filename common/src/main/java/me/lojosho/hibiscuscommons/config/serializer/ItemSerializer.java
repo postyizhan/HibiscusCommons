@@ -171,7 +171,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
 
         if (!colorNode.virtual()) {
             if (ColorBuilder.canBeColored(item.getType())) {
-                if (!redNode.virtual()) {
+                if (!redNode.virtual() && !greenNode.virtual() && !blueNode.virtual()) {
                     itemMeta = ColorBuilder.color(itemMeta, Color.fromRGB(redNode.getInt(0), greenNode.getInt(0), blueNode.getInt(0)));
                 } else {
                     itemMeta = ColorBuilder.color(itemMeta, ServerUtils.hex2Rgb(colorNode.getString("#FFFFFF")));
