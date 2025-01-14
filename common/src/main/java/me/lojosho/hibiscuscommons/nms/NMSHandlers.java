@@ -51,7 +51,7 @@ public class NMSHandlers {
                 HibiscusCommonsPlugin.getInstance().getLogger().severe("  - " + supportedVersion);
             }
             HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
-            HibiscusCommonsPlugin.getInstance().getLogger().severe("Please report this issue to the developer.");
+            HibiscusCommonsPlugin.getInstance().getLogger().severe("Please update HibiscusCommons that supports this version.");
             throw new RuntimeException("Failed to detect the server version.");
         }
 
