@@ -63,12 +63,13 @@ public abstract class HibiscusPlugin extends JavaPlugin {
                 .onSuccess((commandSenders, latestVersion) -> {
                     this.latestVersion = (String) latestVersion;
                     String pluginName = getDescription().getName();
+                    String version = getDescription().getVersion();
 
-                    if (!this.latestVersion.equalsIgnoreCase(getDescription().getVersion())) {
+                    if (!this.latestVersion.equalsIgnoreCase(version)) {
                         getLogger().info("+++++++++++++++++++++++++++++++++++");
                         getLogger().info("There is a new update for " + pluginName + "!");
                         getLogger().info("Please download it as soon as possible for possible fixes and new features.");
-                        getLogger().info("Current Version " + getDescription().getVersion() + " | Latest Version " + latestVersion);
+                        getLogger().info("Current Version " + version + " | Latest Version " + latestVersion);
                         //getLogger().info("Spigot: https://www.spigotmc.org/resources/100107/");
                         getLogger().info("Polymart: https://polymart.org/resource/" + resourceID);
                         getLogger().info("+++++++++++++++++++++++++++++++++++");
