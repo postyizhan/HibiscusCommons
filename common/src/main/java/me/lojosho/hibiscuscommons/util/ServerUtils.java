@@ -2,6 +2,7 @@ package me.lojosho.hibiscuscommons.util;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
+import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bukkit.Color;
 import org.bukkit.entity.Entity;
@@ -104,6 +105,7 @@ public class ServerUtils {
      */
     @NotNull
     public static List<Player> getViewers(@NotNull Entity entity) {
+        if (HibiscusCommonsPlugin.isOnPaper()) return List.copyOf(entity.getTrackedBy());
         ArrayList<Player> viewers = new ArrayList<>();
         for (Player player : entity.getLocation().getWorld().getPlayers()) {
             if (player.canSee(entity)) viewers.add(player);
