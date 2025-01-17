@@ -163,7 +163,7 @@ public class Hooks {
     public static boolean isInvisible(UUID uuid) {
         boolean invisible = false;
         for (Hook hook : HOOK_POOL.values()) {
-            if (hook.isActive()) {
+            if (hook.isDetected()) {
                 if (hook.isInvisible(uuid)) invisible = true;
             }
         }
