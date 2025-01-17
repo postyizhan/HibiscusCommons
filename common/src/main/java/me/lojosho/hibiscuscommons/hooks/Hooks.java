@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Hooks {
 
@@ -157,5 +158,15 @@ public class Hooks {
         Hook hook = getHook(id);
         if (hook == null) return false;
         return hook.isActive();
+    }
+
+    public static boolean isInvisible(UUID uuid) {
+        boolean invisible = false;
+        for (Hook hook : HOOK_POOL.values()) {
+            if (hook.isActive()) {
+                if (hook.isInvisible(uuid)) invisible = true;
+            }
+        }
+        return invisible;
     }
 }

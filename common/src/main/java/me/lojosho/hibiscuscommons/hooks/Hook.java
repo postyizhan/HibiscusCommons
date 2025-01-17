@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 /**
  * Represents a hook into other minecraft plugins
  */
@@ -149,5 +151,13 @@ public abstract class Hook implements Listener {
 
     public String getEntityString(@NotNull Entity entity) {
         return null;
+    }
+
+    /**
+     * Whether the entity is invisible (as defined by the hook)
+     * @return true if the entity is invisible, false otherwise (or if the hook does not support entity invisibility)
+     */
+    public boolean isInvisible(UUID uuid) {
+        return false;
     }
 }
