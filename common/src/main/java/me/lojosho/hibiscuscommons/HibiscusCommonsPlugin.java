@@ -20,13 +20,6 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
     public void onStart() {
         instance = this;
 
-        try {
-            NMSHandlers.setup();
-        } catch (RuntimeException e) {
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         // Detects if a user is running a paper server
         if (ServerUtils.hasClass("com.destroystokyo.paper.PaperConfig") || ServerUtils.hasClass("io.papermc.paper.configuration.Configuration")) {
             onPaper = true;
@@ -36,6 +29,13 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
             getLogger().warning("Paper was not detected! Some features may not work as expected.");
             getLogger().warning("Please consider using Paper for the best experience.");
             getLogger().warning("Download Paper at: https://papermc.io/");
+        }
+
+        try {
+            NMSHandlers.setup();
+        } catch (RuntimeException e) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
         // Plugin startup logic
