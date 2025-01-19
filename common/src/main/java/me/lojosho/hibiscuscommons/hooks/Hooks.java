@@ -134,7 +134,7 @@ public class Hooks {
 
     public static String getStringItem(ItemStack itemStack) {
         for (Hook hook : HOOK_POOL.values()) {
-            if (hook.isActive() && hook.hasEnabledItemHook()) {
+            if (hook.isDetected() && hook.hasEnabledItemHook()) {
                 String stringyItem = hook.getItemString(itemStack);
                 if (stringyItem == null) continue;
                 return hook.getId() + ":" + stringyItem;
@@ -145,7 +145,7 @@ public class Hooks {
 
     public static String getStringEntity(Entity entity) {
         for (Hook hook : HOOK_POOL.values()) {
-            if (hook.isActive() && hook.hasEnabledEntityHook()) {
+            if (hook.isDetected() && hook.hasEnabledEntityHook()) {
                 String stringyEntity = hook.getEntityString(entity);
                 if (stringyEntity != null) return hook.getId() + ":" + stringyEntity;
             }
