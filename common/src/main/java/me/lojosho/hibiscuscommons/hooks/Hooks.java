@@ -157,6 +157,7 @@ public class Hooks {
     public static boolean isActiveHook(String id) {
         Hook hook = getHook(id);
         if (hook == null) return false;
+        if (!hook.isDetected()) return false;
         return hook.isActive();
     }
 
