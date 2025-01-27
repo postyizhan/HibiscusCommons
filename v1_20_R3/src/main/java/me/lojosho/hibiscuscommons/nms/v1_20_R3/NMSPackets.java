@@ -1,13 +1,23 @@
 package me.lojosho.hibiscuscommons.nms.v1_20_R3;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.JsonOps;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.IntList;
+import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,6 +36,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -294,5 +305,10 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
 
         ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entityId, dataValues);
         for (Player p : sendTo) sendPacket(p, packet);
+    }
+
+    @Override
+    public void sendToastPacket(Player player, ItemStack icon, Component title, Component description) {
+        throw new UnsupportedOperationException("Not implemented in this version.");
     }
 }

@@ -1,13 +1,22 @@
 package me.lojosho.hibiscuscommons.nms.v1_21_R3;
 
+import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.JsonOps;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.IntList;
+import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
+import net.minecraft.advancements.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -29,6 +38,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -42,6 +52,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     static Constructor<ClientboundSetEntityLinkPacket> linkConstructor;
     static Constructor<ClientboundSetCameraPacket> cameraConstructor;
     static Constructor<ClientboundPlayerLookAtPacket> lookAtConstructor;
+
     static {
         try {
             passengerConstructor = ClientboundSetPassengersPacket.class.getDeclaredConstructor(FriendlyByteBuf.class);
@@ -280,5 +291,73 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
 
         ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entityId, dataValues);
         for (Player p : sendTo) sendPacket(p, packet);
+    }
+
+    public void sendToastPacket(Player player, ItemStack icon, Component title, Component description) {
+        final var key = ResourceLocation.fromNamespaceAndPath("hibiscuscommons", UUID.randomUUID().toString());
+
+        JsonObject json = new JsonObject();
+
+        // Creating the "criteria" object
+        JsonObject impossibleCriteria = new JsonObject();
+        JsonObject impossible = new JsonObject();
+        impossible.addProperty("trigger", "minecraft:impossible");
+        impossibleCriteria.add("impossible", impossible);
+        json.add("criteria", impossibleCriteria);
+
+        // Creating the "display" object
+        JsonObject display = new JsonObject();
+        JsonObject iconObj = new JsonObject();
+        iconObj.addProperty("id", icon.getType().getKey().toString());
+
+        if (icon.hasItemMeta()) {
+            ItemMeta meta = icon.getItemMeta();
+            JsonObject components = new JsonObject();
+
+            if (!meta.getEnchants().isEmpty()) {
+                components.addProperty("minecraft:enchantment_glint_override", true);
+            }
+
+            if (meta.hasCustomModelData()) {
+                components.addProperty("minecraft:custom_model_data", meta.getCustomModelData());
+            }
+
+            iconObj.add("components", components);
+        }
+
+        display.add("icon", iconObj);
+        display.add("title", GsonComponentSerializer.gson().serializeToTree(title));
+        display.add("description", GsonComponentSerializer.gson().serializeToTree(description));
+        display.addProperty("description", "Toast Description");
+        display.addProperty("frame", "task");
+        display.addProperty("announce_to_chat", false);
+        display.addProperty("show_toast", true);
+        display.addProperty("hidden", true);
+
+        json.add("display", display);
+
+        final var advancement = Advancement.CODEC.parse(MinecraftServer.getServer().registryAccess().createSerializationContext(JsonOps.INSTANCE), json);
+        final var advancementHolder = new AdvancementHolder(key, advancement.result().orElseThrow());
+
+        final var nmsPlayer = ((CraftPlayer) player).getHandle();
+        final var progress = nmsPlayer.getAdvancements().getOrStartProgress(advancementHolder);
+        MinecraftServer.getServer().getAdvancements().tree().addAll(Set.of(advancementHolder));
+        progress.getRemainingCriteria().forEach(criteria -> nmsPlayer.getAdvancements().award(advancementHolder, criteria));
+
+        Bukkit.getScheduler().runTaskLater(HibiscusCommonsPlugin.getInstance(), () -> {
+            progress.getRemainingCriteria().forEach(criteria -> nmsPlayer.getAdvancements().revoke(advancementHolder, criteria));
+            MinecraftServer.getServer().getAdvancements().tree().remove(Set.of(key));
+
+            // Remove the advancement from the player's client to prevent it from being displayed again
+            // Was not working without this?
+            ClientboundUpdateAdvancementsPacket removePacket = new ClientboundUpdateAdvancementsPacket(
+                    false,
+                    Collections.emptyList(),
+                    Set.of(key),
+                    Map.of()
+            );
+
+            sendPacket(player, removePacket);
+        }, 2L);
     }
 }
