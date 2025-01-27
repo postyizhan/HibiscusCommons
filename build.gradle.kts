@@ -108,6 +108,7 @@ allprojects {
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.18.0")
         compileOnly("net.kyori:adventure-text-minimessage:4.18.0")
+        compileOnly("net.kyori:adventure-text-serializer-gson:4.18.0")
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
@@ -136,7 +137,7 @@ tasks {
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.4")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
@@ -216,6 +217,7 @@ bukkit {
     libraries = listOf(
         "net.kyori:adventure-api:4.18.0",
         "net.kyori:adventure-text-minimessage:4.18.0",
+        "net.kyori:adventure-text-serializer-gson:4.18.0",
         "net.kyori:adventure-platform-bukkit:4.3.4",
         "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
