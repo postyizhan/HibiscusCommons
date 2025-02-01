@@ -3,9 +3,11 @@ package me.lojosho.hibiscuscommons.hooks;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
+import me.lojosho.hibiscuscommons.api.events.HibiscusHooksAllActiveEvent;
 import me.lojosho.hibiscuscommons.hooks.items.*;
 import me.lojosho.hibiscuscommons.hooks.misc.*;
 import me.lojosho.hibiscuscommons.hooks.placeholders.HookPlaceholderAPI;
+import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -15,10 +17,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Hooks {
 
-    private static final HashMap<String, Hook> hooks = new HashMap<>();
+    private static final HashMap<String, Hook> HOOK_POOL = new HashMap<>();
     private static final HookNexo NEXO_HOOK = new HookNexo();
     private static final HookOraxen ORAXEN_HOOK = new HookOraxen();
     private static final HookItemAdder ITEMADDER_HOOK = new HookItemAdder();
@@ -37,16 +42,18 @@ public class Hooks {
     private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
     private static final HookGSit GSIT_HOOK = new HookGSit();
 
+    private static boolean allHooksActive = false;
+
     public static Hook getHook(@NotNull String id) {
-        return hooks.get(id.toLowerCase());
+        return HOOK_POOL.get(id.toLowerCase());
     }
 
     public static boolean isItemHook(@NotNull String id) {
-        return hooks.containsKey(id.toLowerCase());
+        return HOOK_POOL.containsKey(id.toLowerCase());
     }
 
     public static void addHook(Hook hook) {
-        hooks.put(hook.getId().toLowerCase(), hook);
+        HOOK_POOL.put(hook.getId().toLowerCase(), hook);
     }
 
     public static void addPlaceholderAPI(PlaceholderExpansion expansion) {
@@ -63,14 +70,47 @@ public class Hooks {
     }
 
     public static void setup() {
-        for (Hook hook : hooks.values()) {
+        for (Hook hook : HOOK_POOL.values()) {
             if (Bukkit.getPluginManager().getPlugin(hook.getId()) != null) {
                 HibiscusCommonsPlugin.getInstance().getServer().getPluginManager().registerEvents(hook, HibiscusCommonsPlugin.getInstance());
-                hook.setActive(true);
+                hook.setDetected(true);
                 hook.load();
+
                 HibiscusCommonsPlugin.getInstance().getLogger().info("Successfully hooked into " + hook.getId());
             }
         }
+
+        checkHookLoadingStatus();
+    }
+
+    /**
+     * Checks if all hooked hooks are actually active
+     * so {@link HibiscusHooksAllActiveEvent} is called.
+     * This is an operation that occurs only once to allow plugins
+     * load their stuff successfully when all hooks are active.
+     */
+    public static void checkHookLoadingStatus() {
+        if (allHooksActive) {
+            return;
+        }
+
+        List<Hook> lateLoadHooks = HOOK_POOL.values().stream().filter(Hook::isDetected).filter(Hook::hasEnabledLateLoadHook).toList();
+        if (lateLoadHooks.isEmpty()) {
+            MessagesUtil.sendDebugMessages("Not awaiting anymore plugins... All hooks are now active.");
+            setAllHooksActive();
+            return;
+        }
+
+        List<Hook> activeLateHooks = lateLoadHooks.stream().filter(Hook::isActive).toList();
+        if (activeLateHooks.size() == lateLoadHooks.size()) {
+            MessagesUtil.sendDebugMessages("Match Hook");
+            setAllHooksActive();
+        }
+    }
+
+    private static void setAllHooksActive() {
+        allHooksActive = true;
+        Bukkit.getPluginManager().callEvent(new HibiscusHooksAllActiveEvent());
     }
 
     @Nullable
@@ -88,13 +128,13 @@ public class Hooks {
         if (!isItemHook(split[0])) return null;
         Hook hook = getHook(split[0]);
         if (!hook.hasEnabledItemHook()) return null;
-        if (!hook.isActive()) return null;
+        if (!hook.isDetected() || !hook.isActive()) return null;
         return hook.getItem(split[1]);
     }
 
     public static String getStringItem(ItemStack itemStack) {
-        for (Hook hook : hooks.values()) {
-            if (hook.isActive() && hook.hasEnabledItemHook()) {
+        for (Hook hook : HOOK_POOL.values()) {
+            if (hook.isDetected() && hook.hasEnabledItemHook()) {
                 String stringyItem = hook.getItemString(itemStack);
                 if (stringyItem == null) continue;
                 return hook.getId() + ":" + stringyItem;
@@ -104,8 +144,8 @@ public class Hooks {
     }
 
     public static String getStringEntity(Entity entity) {
-        for (Hook hook : hooks.values()) {
-            if (hook.isActive() && hook.hasEnabledEntityHook()) {
+        for (Hook hook : HOOK_POOL.values()) {
+            if (hook.isDetected() && hook.hasEnabledEntityHook()) {
                 String stringyEntity = hook.getEntityString(entity);
                 if (stringyEntity != null) return hook.getId() + ":" + stringyEntity;
             }
@@ -117,6 +157,16 @@ public class Hooks {
     public static boolean isActiveHook(String id) {
         Hook hook = getHook(id);
         if (hook == null) return false;
+        if (!hook.isDetected()) return false;
         return hook.isActive();
+    }
+
+    public static boolean isInvisible(UUID uuid) {
+        for (Hook hook : HOOK_POOL.values()) {
+            if (hook.isDetected()) {
+                if (hook.isInvisible(uuid)) return true;
+            }
+        }
+        return false;
     }
 }

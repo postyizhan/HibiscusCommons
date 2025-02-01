@@ -2,12 +2,17 @@ package me.lojosho.hibiscuscommons.util;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
+import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import org.bukkit.Color;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ServerUtils {
 
@@ -90,6 +95,22 @@ public class ServerUtils {
             return nextYaw;
         }
         return nextYaw;
+    }
+
+    /**
+     * Get the viewers of an entity (Players only) that can see the entity in the world.
+     * This ignores config view distances and checks directly with the server.
+     * @param entity
+     * @return
+     */
+    @NotNull
+    public static List<Player> getViewers(@NotNull Entity entity) {
+        if (HibiscusCommonsPlugin.isOnPaper()) return List.copyOf(entity.getTrackedBy());
+        ArrayList<Player> viewers = new ArrayList<>();
+        for (Player player : entity.getLocation().getWorld().getPlayers()) {
+            if (player.canSee(entity)) viewers.add(player);
+        }
+        return viewers;
     }
 
     public static boolean hasClass(String className) {

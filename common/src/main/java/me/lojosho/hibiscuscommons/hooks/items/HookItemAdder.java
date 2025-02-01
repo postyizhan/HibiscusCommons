@@ -21,10 +21,9 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class HookItemAdder extends Hook {
-    private boolean enabled = false;
 
     public HookItemAdder() {
-        super("itemsadder", HookFlag.ITEM_SUPPORT);
+        super("itemsadder", HookFlag.ITEM_SUPPORT, HookFlag.LATE_LOAD);
     }
 
     /**
@@ -32,7 +31,7 @@ public class HookItemAdder extends Hook {
      */
     @Override
     public ItemStack getItem(@NotNull String itemId) {
-        if (enabled) {
+        if (isActive()) {
             CustomStack stack = CustomStack.getInstance(itemId);
             if (stack == null) return null;
             return stack.getItemStack().clone();
@@ -43,10 +42,13 @@ public class HookItemAdder extends Hook {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onItemAdderDataLoad(ItemsAdderLoadDataEvent event) {
-        HibiscusHookReload.ReloadType reloadType = enabled ? HibiscusHookReload.ReloadType.RELOAD : HibiscusHookReload.ReloadType.INITIAL;
-        this.enabled = true;
-        HibiscusHookReload newEvent = new HibiscusHookReload(this, reloadType);
-        Bukkit.getPluginManager().callEvent(newEvent);
+        HibiscusHookReload.ReloadType type = HibiscusHookReload.ReloadType.RELOAD;
+        if (!isActive()) {
+            type = HibiscusHookReload.ReloadType.INITIAL;
+            setActive(true);
+        }
+
+        Bukkit.getPluginManager().callEvent(new HibiscusHookReload(this, type));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -69,7 +71,14 @@ public class HookItemAdder extends Hook {
         return CustomStack.byItemStack(itemStack).getId();
     }
 
+    /**
+     * Checks if ItemsAdder hook is enabled
+     * @return whether ItemsAdder hook is enabled or not
+     * @deprecated as you can just check if the hook is active
+     * by calling {@link #isActive()}
+     */
+    @Deprecated
     public boolean getIAEnabled() {
-        return enabled;
+        return isActive();
     }
 }

@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.6.0${getGitCommitHash()}"
+version = "0.6.1${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -76,7 +76,7 @@ allprojects {
         compileOnly(fileTree("${project.rootDir}/lib") { include("*.jar") })
 
         // Included externally
-        compileOnly("com.mojang:authlib:1.5.25")
+        compileOnly("com.mojang:authlib:3.13.56")
         //compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
         compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
@@ -84,12 +84,12 @@ allprojects {
         compileOnly("com.nexomc:nexo:0.8.0-dev.8")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
-        compileOnly("it.unimi.dsi:fastutil:8.5.13")
+        compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.2.1")
         compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
-        compileOnly("com.willfp:eco:6.67.2")
+        compileOnly("com.willfp:eco:6.74.5")
         compileOnly("me.clip:placeholderapi:2.11.6")
         compileOnly("LibsDisguises:LibsDisguises:10.0.44") {
             exclude("org.spigotmc", "spigot")
@@ -97,23 +97,24 @@ allprojects {
         compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
         compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
-        compileOnly("org.joml:joml:1.10.5")
+        compileOnly("org.joml:joml:1.10.8")
 
         // Lombok <3
-        annotationProcessor("org.projectlombok:lombok:1.18.34")
-        compileOnly("org.projectlombok:lombok:1.18.34")
-        testCompileOnly("org.projectlombok:lombok:1.18.34")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+        annotationProcessor("org.projectlombok:lombok:1.18.36")
+        compileOnly("org.projectlombok:lombok:1.18.36")
+        testCompileOnly("org.projectlombok:lombok:1.18.36")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.18.0")
         compileOnly("net.kyori:adventure-text-minimessage:4.18.0")
+        compileOnly("net.kyori:adventure-text-serializer-gson:4.18.0")
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
-        compileOnly("org.apache.commons:commons-lang3:3.14.0")
+        compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
         implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT")
-        implementation("org.bstats:bstats-bukkit:3.0.2")
+        implementation("org.bstats:bstats-bukkit:3.1.0")
         implementation("com.jeff_media:SpigotUpdateChecker:3.0.0")
         implementation("com.github.BG-Software-LLC:CommentedConfiguration:bed3c46369")
     }
@@ -131,13 +132,12 @@ dependencies {
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        //options.release.set(17)
     }
 
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.4")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
@@ -217,8 +217,9 @@ bukkit {
     libraries = listOf(
         "net.kyori:adventure-api:4.18.0",
         "net.kyori:adventure-text-minimessage:4.18.0",
+        "net.kyori:adventure-text-serializer-gson:4.18.0",
         "net.kyori:adventure-platform-bukkit:4.3.4",
-        "org.apache.commons:commons-lang3:3.14.0"
+        "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
 }

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookEco extends Hook {
     public HookEco() {
         super("Eco", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     @Override

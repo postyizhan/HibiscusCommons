@@ -6,14 +6,21 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 /**
  * Represents a hook into other minecraft plugins
  */
 public abstract class Hook implements Listener {
+
     private final String id;
+
+    private boolean detected = false;
     private boolean active = false;
+
     private boolean itemHook = false;
     private boolean entityHook = false;
+    private boolean lateLoadHook = false;
 
     public Hook(@NotNull String id, HookFlag... flags) {
         this.id = id;
@@ -25,8 +32,12 @@ public abstract class Hook implements Listener {
                 case ENTITY_SUPPORT:
                     setEnabledEntityHook(true);
                     break;
+                case LATE_LOAD:
+                    setEnabledLateLoadHook(true);
+                    break;
             }
         }
+
         Hooks.addHook(this);
     }
 
@@ -35,10 +46,11 @@ public abstract class Hook implements Listener {
      *
      * @implNote By default, this method does nothing. It should be overridden by child classes to implement any necessary loading logic
      */
-    public void load() { }
+    public void load() {}
 
     /**
      * Gets an {@link ItemStack} that is associated with the provided id from the hooked plugin
+     *
      * @param itemId The id of the {@link ItemStack}
      * @return The {@link ItemStack} with the id provided. If an invalid id was provided or if the hook doesn't have any related {@link ItemStack}s then this will return null
      * @implNote By default, this method returns null. It should be overridden by child classes if you will to have your hook return a related {@link ItemStack}
@@ -60,6 +72,7 @@ public abstract class Hook implements Listener {
 
     /**
      * Gets whether this hook has been activated
+     *
      * @return true if this hook is active, false otherwise
      * @deprecated As of release 2.2.5+, replaced by {@link #isActive()}
      */
@@ -70,6 +83,7 @@ public abstract class Hook implements Listener {
 
     /**
      * Gets whether this hook has been activated
+     *
      * @return true if this hook is active, false otherwise
      * @since 2.2.5
      */
@@ -79,16 +93,27 @@ public abstract class Hook implements Listener {
 
     /**
      * Sets whether this hook is active
+     *
      * @param active true to activate the hook, false otherwise
      */
     public final void setActive(boolean active) {
         this.active = active;
+
+        if (hasEnabledLateLoadHook()) Hooks.checkHookLoadingStatus();
+    }
+
+    public final boolean isDetected() {
+        return this.detected;
+    }
+
+    public final void setDetected(boolean detected) {
+        this.detected = detected;
     }
 
     /**
      * Whether the method {@link #getItem(String)} should return a non-null value
-     * @return true if {@link #getItem(String)} should return a non-null value, false otherwise
      *
+     * @return true if {@link #getItem(String)} should return a non-null value, false otherwise
      * @apiNote Even though this method returns true does not mean that {@link #getItem(String)} won't return null, rather if this returns false then {@link #getItem(String)} should return false everytime
      */
     public final boolean hasEnabledItemHook() {
@@ -99,8 +124,13 @@ public abstract class Hook implements Listener {
         return entityHook;
     }
 
+    public final boolean hasEnabledLateLoadHook() {
+        return lateLoadHook;
+    }
+
     /**
      * Sets whether the method {@link #getItem(String)} should return a non-null value
+     *
      * @param enabled true if {@link #getItem(String)} should return a non-null value, false otherwise
      */
     public final void setEnabledItemHook(boolean enabled) {
@@ -111,11 +141,23 @@ public abstract class Hook implements Listener {
         entityHook = enabled;
     }
 
+    public final void setEnabledLateLoadHook(boolean enabled) {
+        lateLoadHook = enabled;
+    }
+
     public String getItemString(@NotNull ItemStack itemStack) {
         return null;
     }
 
     public String getEntityString(@NotNull Entity entity) {
         return null;
+    }
+
+    /**
+     * Whether the entity is invisible (as defined by the hook)
+     * @return true if the entity is invisible, false otherwise (or if the hook does not support entity invisibility)
+     */
+    public boolean isInvisible(UUID uuid) {
+        return false;
     }
 }

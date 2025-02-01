@@ -17,6 +17,7 @@ public class HookCustomFishing extends Hook {
 
     public HookCustomFishing() {
         super("CustomFishing", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     @Override

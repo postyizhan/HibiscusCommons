@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class HookMMOItems extends Hook {
     public HookMMOItems() {
         super("MMOItems", HookFlag.ITEM_SUPPORT);
+        setActive(true);
     }
 
     @Override
