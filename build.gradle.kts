@@ -98,6 +98,7 @@ allprojects {
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
         compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
         compileOnly("org.joml:joml:1.10.8")
+        compileOnly("com.github.Gecolay.GSit:core:2.0.0")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.36")

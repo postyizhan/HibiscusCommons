@@ -1,7 +1,7 @@
 package me.lojosho.hibiscuscommons.hooks.misc;
 
-import dev.geco.gsit.api.event.PlayerGetUpPoseEvent;
 import dev.geco.gsit.api.event.PlayerPoseEvent;
+import dev.geco.gsit.api.event.PlayerStopPoseEvent;
 import me.lojosho.hibiscuscommons.api.events.HibiscusPlayerPoseEvent;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ public class HookGSit extends Hook {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onPlayerGetUp(PlayerGetUpPoseEvent event) {
+    public void onPlayerGetUp(PlayerStopPoseEvent event) {
         HibiscusPlayerPoseEvent newEvent = new HibiscusPlayerPoseEvent(this, event.getPlayer(), true);
         Bukkit.getPluginManager().callEvent(newEvent);
     }
