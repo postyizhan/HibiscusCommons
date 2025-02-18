@@ -31,6 +31,7 @@ allprojects {
 
         // Nexo
         maven("https://repo.nexomc.com/snapshots/")
+        maven("https://repo.nexomc.com/releases/")
 
         // Geary & Backup ProtocolLib repo
         maven("https://repo.mineinabyss.com/releases/")
@@ -77,11 +78,10 @@ allprojects {
 
         // Included externally
         compileOnly("com.mojang:authlib:3.13.56")
-        //compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
         compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
-        compileOnly("com.nexomc:nexo:0.8.0-dev.8")
+        compileOnly("com.nexomc:nexo:1.0.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
