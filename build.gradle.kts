@@ -98,6 +98,7 @@ allprojects {
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
         compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
         compileOnly("org.joml:joml:1.10.8")
+        compileOnly("com.github.Gecolay.GSit:core:2.0.0")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.36")
@@ -108,6 +109,7 @@ allprojects {
         // Spigot Auto Loader Libraries
         compileOnly("net.kyori:adventure-api:4.18.0")
         compileOnly("net.kyori:adventure-text-minimessage:4.18.0")
+        compileOnly("net.kyori:adventure-text-serializer-gson:4.18.0")
         compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
@@ -136,7 +138,7 @@ tasks {
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.21.4")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
@@ -216,6 +218,7 @@ bukkit {
     libraries = listOf(
         "net.kyori:adventure-api:4.18.0",
         "net.kyori:adventure-text-minimessage:4.18.0",
+        "net.kyori:adventure-text-serializer-gson:4.18.0",
         "net.kyori:adventure-platform-bukkit:4.3.4",
         "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases

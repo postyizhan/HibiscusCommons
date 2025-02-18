@@ -1,6 +1,7 @@
 package me.lojosho.hibiscuscommons.nms;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -74,4 +75,6 @@ public interface NMSPackets {
                                  int blockLight, int skyLight, float viewRange, float width, float height,
                                  ItemDisplay.ItemDisplayTransform transform, ItemStack itemStack,
                                  List<Player> sendTo);
+
+    void sendToastPacket(Player player, ItemStack icon, Component title, Component description);
 }
