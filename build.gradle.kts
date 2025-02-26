@@ -114,7 +114,7 @@ allprojects {
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
-        implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT")
+        implementation("org.spongepowered:configurate-yaml:4.2.0")
         implementation("org.bstats:bstats-bukkit:3.1.0")
         implementation("com.jeff_media:SpigotUpdateChecker:3.0.0")
         implementation("com.github.BG-Software-LLC:CommentedConfiguration:bed3c46369")
