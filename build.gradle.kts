@@ -114,7 +114,10 @@ allprojects {
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
-        implementation("org.spongepowered:configurate-yaml:4.2.0")
+        implementation("org.spongepowered:configurate-yaml:4.2.0") {
+            exclude("net.kyori")
+        }
+        implementation("net.kyori:option:1.1.0")
         implementation("org.bstats:bstats-bukkit:3.1.0")
         implementation("com.jeff_media:SpigotUpdateChecker:3.0.0")
         implementation("com.github.BG-Software-LLC:CommentedConfiguration:bed3c46369")
@@ -168,6 +171,7 @@ tasks {
         relocate("org.spongepowered.configurate", "me.lojosho.shaded.configurate")
         relocate("com.jeff_media.updatechecker", "me.lojosho.shaded.updatechecker")
         relocate("com.bgsoftware", "me.lojosho.shaded.configupdater")
+        relocate("net.kyori.option", "me.lojosho.shaded.option")
 
         dependencies {
             exclude(dependency("org.yaml:snakeyaml"))
