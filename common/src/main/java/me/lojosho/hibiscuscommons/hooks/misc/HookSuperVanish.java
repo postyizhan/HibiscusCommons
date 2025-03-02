@@ -41,12 +41,10 @@ public class HookSuperVanish extends Hook {
 
     @Override
     public boolean isInvisible(UUID uuid) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        if (!player.isOnline()) {
-            return VanishAPI.isInvisibleOffline(uuid);
-        }
-        Player onlinePlayer = player.getPlayer();
-        if (onlinePlayer == null) return false;
-        return VanishAPI.isInvisible(onlinePlayer);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        if (!offlinePlayer.isOnline()) return false;
+        Player player = offlinePlayer.getPlayer();
+        if (player == null) return false;
+        return VanishAPI.isInvisible(player);
     }
 }
