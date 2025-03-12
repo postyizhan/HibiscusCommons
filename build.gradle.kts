@@ -86,7 +86,7 @@ allprojects {
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
-        compileOnly("io.lumine:Mythic-Dist:5.2.1")
+        compileOnly("io.lumine:Mythic-Dist:5.8.0")
         compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
         compileOnly("com.willfp:eco:6.74.5")
@@ -94,10 +94,11 @@ allprojects {
         compileOnly("LibsDisguises:LibsDisguises:10.0.44") {
             exclude("org.spigotmc", "spigot")
         }
-        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.2.26")
+        compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.3.3")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
         compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
         compileOnly("org.joml:joml:1.10.8")
+        compileOnly("com.google.guava:guava:33.4.0-jre") // Sometimes just not included in compile time???
         compileOnly("com.github.Gecolay.GSit:core:2.0.0")
 
         // Lombok <3
