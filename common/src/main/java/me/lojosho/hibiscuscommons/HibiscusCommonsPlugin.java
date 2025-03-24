@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.ServerUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 public final class HibiscusCommonsPlugin extends HibiscusPlugin {
 
@@ -11,6 +12,8 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
     private static HibiscusCommonsPlugin instance;
     @Getter
     private static boolean onPaper = false;
+    @Getter
+    private static boolean onFolia = false;
 
     public HibiscusCommonsPlugin() {
         super(20726);
@@ -20,9 +23,10 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
     public void onStart() {
         instance = this;
 
-        // Detects if a user is running a paper server
-        if (ServerUtils.hasClass("com.destroystokyo.paper.PaperConfig") || ServerUtils.hasClass("io.papermc.paper.configuration.Configuration")) {
-            onPaper = true;
+        // Do startup checks
+        onPaper = isOnPaper();
+        onFolia = isOnFolia();
+        if (onPaper) {
             getLogger().info("Detected Paper! Enabling Paper support...");
             //getServer().getPluginManager().registerEvents(new PaperPlayerGameListener(), this);
         } else {
@@ -40,6 +44,29 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
 
         // Plugin startup logic
         Hooks.setup();
+    }
 
+    /**
+     * Checks for Paper classes. Use {@link HibiscusCommonsPlugin#isOnPaper()} for cached value
+     * @return True if plugin is running on a server with Paper; False if not
+     */
+    @ApiStatus.Internal
+    public boolean checkPaper() {
+        if (ServerUtils.hasClass("com.destroystokyo.paper.PaperConfig") || ServerUtils.hasClass("io.papermc.paper.configuration.Configuration")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks for the Folia classes. Use {@link HibiscusCommonsPlugin#isOnFolia()} for cached value.
+     * @return True if plugin is running on a server with Folia; False if not
+     */
+    @ApiStatus.Internal
+    public boolean checkFolia() {
+        if (ServerUtils.hasClass("io.papermc.paper.threadedregions.RegionizedServer")) {
+            return true;
+        }
+        return false;
     }
 }
