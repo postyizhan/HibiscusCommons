@@ -1,5 +1,7 @@
 package me.lojosho.hibiscuscommons.config.serializer;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
 import me.lojosho.hibiscuscommons.nms.MinecraftVersion;
@@ -129,7 +131,13 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
             for (ConfigurationNode enchantNode : enchantsNode.childrenMap().values()) {
                 String enchantName = enchantNode.key().toString().toLowerCase();
                 NamespacedKey key = NamespacedKey.minecraft(enchantName);
-                Enchantment enchant = Registry.ENCHANTMENT.get(key);
+                Enchantment enchant = null;
+
+                if (HibiscusCommonsPlugin.isOnPaper() && NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_21_4)) {
+                    enchant = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
+                } else {
+                    enchant = Registry.ENCHANTMENT.get(key);
+                }
                 if (enchant == null) continue;
                 itemMeta.addEnchant(enchant, enchantNode.getInt(1), true);
             }
