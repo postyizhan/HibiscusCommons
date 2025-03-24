@@ -2,6 +2,9 @@ package me.lojosho.hibiscuscommons.config.serializer;
 
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
+import me.lojosho.hibiscuscommons.nms.MinecraftVersion;
+import me.lojosho.hibiscuscommons.nms.NMSHandler;
+import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.*;
 import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.*;
@@ -35,6 +38,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
     private static final String GLOWING = "glowing";
     private static final String LORE = "lore";
     private static final String MODEL_DATA = "model-data";
+    private static final String MODEL_ID = "model-id";
     private static final String NBT_TAGS = "nbt-tag";
     private static final String ENCHANTS = "enchants";
     private static final String ITEM_FLAGS = "item-flags";
@@ -58,6 +62,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         final ConfigurationNode glowingNode = source.node(GLOWING);
         final ConfigurationNode loreNode = source.node(LORE);
         final ConfigurationNode modelDataNode = source.node(MODEL_DATA);
+        final ConfigurationNode modelIdNode = source.node(MODEL_ID);
         final ConfigurationNode nbtNode = source.node(NBT_TAGS);
         final ConfigurationNode enchantsNode = source.node(ENCHANTS);
         final ConfigurationNode itemFlagsNode = source.node(ITEM_FLAGS);
@@ -87,7 +92,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         if (!unbreakableNode.virtual()) itemMeta.setUnbreakable(unbreakableNode.getBoolean());
         if (!glowingNode.virtual()) {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            itemMeta.addEnchant(Enchantment.LUCK, 1, true);
+            itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
         }
         if (!loreNode.virtual()) {
             if (HibiscusCommonsPlugin.isOnPaper())
@@ -98,6 +103,21 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
 
         }
         if (!modelDataNode.virtual()) itemMeta.setCustomModelData(modelDataNode.getInt());
+        if (NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_21_4) && !modelIdNode.virtual()) {
+            String itemModelId = modelIdNode.getString("");
+            String stringKey = HibiscusCommonsPlugin.getInstance().getName();
+            if (itemModelId.contains(":")) {
+                String[] split = itemModelId.split(":");
+                itemModelId = split[1];
+                stringKey = split[0];
+            }
+            if (!itemModelId.isEmpty()) {
+                NamespacedKey key = new NamespacedKey(stringKey, itemModelId);
+                itemMeta.setItemModel(key);
+            } else {
+                MessagesUtil.sendDebugMessages("Could not find item model id for " + stringKey + " in " + itemModelId);
+            }
+        }
 
         if (!nbtNode.virtual()) {
             for (ConfigurationNode nbtNodes : nbtNode.childrenMap().values()) {
