@@ -24,7 +24,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots")
 
         // Paper Repo
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
 
         // UpdateChecker
         maven("https://repo.jeff-media.com/public")
