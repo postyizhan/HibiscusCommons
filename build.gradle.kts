@@ -24,7 +24,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/snapshots")
 
         // Paper Repo
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
 
         // UpdateChecker
         maven("https://repo.jeff-media.com/public")
@@ -78,7 +78,6 @@ allprojects {
 
         // Included externally
         compileOnly("com.mojang:authlib:3.13.56")
-        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
         compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
         compileOnly("com.nexomc:nexo:1.0.0")
