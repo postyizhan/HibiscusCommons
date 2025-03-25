@@ -24,8 +24,8 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
         instance = this;
 
         // Do startup checks
-        onPaper = isOnPaper();
-        onFolia = isOnFolia();
+        onPaper = checkPaper();
+        onFolia = checkFolia();
         if (onPaper) {
             getLogger().info("Detected Paper! Enabling Paper support...");
             //getServer().getPluginManager().registerEvents(new PaperPlayerGameListener(), this);
