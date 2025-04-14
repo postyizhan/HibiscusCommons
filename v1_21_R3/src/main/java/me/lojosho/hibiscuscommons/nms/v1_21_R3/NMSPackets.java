@@ -1,5 +1,6 @@
 package me.lojosho.hibiscuscommons.nms.v1_21_R3;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
@@ -26,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
@@ -39,6 +41,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -318,8 +321,43 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
                 components.addProperty("minecraft:enchantment_glint_override", true);
             }
 
+            if (meta.hasItemModel()) {
+                components.addProperty("minecraft:item_model", meta.getItemModel().toString());
+            }
+
             if (meta.hasCustomModelData()) {
-                components.addProperty("minecraft:custom_model_data", meta.getCustomModelData());
+                CustomModelDataComponent customModelDataComponent = meta.getCustomModelDataComponent();
+                JsonObject customModelDataComponentJson = new JsonObject();
+
+                List<Float> floats = customModelDataComponent.getFloats();
+                if (!floats.isEmpty()) {
+                    JsonArray floatsArray = new JsonArray();
+                    floats.forEach(floatsArray::add);
+                    customModelDataComponentJson.add("floats", floatsArray);
+                }
+
+                List<Boolean> flags = customModelDataComponent.getFlags();
+                if (!flags.isEmpty()) {
+                    JsonArray flagsArray = new JsonArray();
+                    flags.forEach(flagsArray::add);
+                    customModelDataComponentJson.add("flags", flagsArray);
+                }
+
+                List<String> strings = customModelDataComponent.getStrings();
+                if (!strings.isEmpty()) {
+                    JsonArray stringsArray = new JsonArray();
+                    strings.forEach(stringsArray::add);
+                    customModelDataComponentJson.add("strings", stringsArray);
+                }
+
+                List<Color> colors = customModelDataComponent.getColors();
+                if (!colors.isEmpty()) {
+                    JsonArray colorsArray = new JsonArray();
+                    colors.forEach(color -> colorsArray.add(color.asRGB()));
+                    customModelDataComponentJson.add("colors", colorsArray);
+                }
+
+                components.add("minecraft:custom_model_data", customModelDataComponentJson);
             }
 
             iconObj.add("components", components);
