@@ -8,7 +8,9 @@ public enum MinecraftVersion {
     v1_20_6,
     v1_21_1,
     v1_21_3,
-    v1_21_4;
+    v1_21_4,
+    v1_21_5,
+    ;
 
     public boolean isHigher(MinecraftVersion other) {
         return this.ordinal() > other.ordinal();

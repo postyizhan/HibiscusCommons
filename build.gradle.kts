@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.6.2${getGitCommitHash()}"
+version = "0.6.3${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -132,6 +132,7 @@ dependencies {
     implementation(project(path = ":v1_21_R1", configuration = "reobf"))
     implementation(project(path = ":v1_21_R2", configuration = "reobf"))
     implementation(project(path = ":v1_21_R3", configuration = "reobf"))
+    implementation(project(path = ":v1_21_R4", configuration = "reobf"))
 }
 
 tasks {
@@ -142,7 +143,7 @@ tasks {
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.4")
+        minecraftVersion("1.21.5")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
@@ -166,6 +167,7 @@ tasks {
         dependsOn(":v1_21_R1:reobfJar")
         dependsOn(":v1_21_R2:reobfJar")
         dependsOn(":v1_21_R3:reobfJar")
+        dependsOn(":v1_21_R4:reobfJar")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")

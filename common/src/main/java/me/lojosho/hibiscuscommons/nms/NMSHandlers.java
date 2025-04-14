@@ -18,6 +18,7 @@ public class NMSHandlers {
         // 1.20.2 is not supported; was imminently bumped to 1.21.3
         put(MinecraftVersion.v1_21_3, "v1_21_R2");
         put(MinecraftVersion.v1_21_4, "v1_21_R3");
+        put(MinecraftVersion.v1_21_5, "v1_21_R4");
     }};
 
     private static NMSHandler handler;
