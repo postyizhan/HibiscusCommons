@@ -88,8 +88,11 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         if (itemMeta == null) return item;
 
         if (!nameNode.virtual()) {
-            if (HibiscusCommonsPlugin.isOnPaper()) itemMeta.displayName(AdventureUtils.MINI_MESSAGE.deserialize(nameNode.getString("")));
-            else itemMeta.setDisplayName(StringUtils.parseStringToString(nameNode.getString("")));
+            if (HibiscusCommonsPlugin.isOnPaper()) {
+                itemMeta.displayName(AdventureUtils.MINI_MESSAGE.deserialize(nameNode.getString("")));
+            } else {
+                itemMeta.setDisplayName(StringUtils.parseStringToString(nameNode.getString("")));
+            }
         }
         if (!unbreakableNode.virtual()) itemMeta.setUnbreakable(unbreakableNode.getBoolean());
         if (!glowingNode.virtual()) {
@@ -97,11 +100,13 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
             itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
         }
         if (!loreNode.virtual()) {
-            if (HibiscusCommonsPlugin.isOnPaper())
+            if (HibiscusCommonsPlugin.isOnPaper()) {
                 itemMeta.lore(loreNode.getList(String.class, new ArrayList<>()).
                         stream().map(AdventureUtils.MINI_MESSAGE::deserialize).collect(Collectors.toList()));
-            else itemMeta.setLore(loreNode.getList(String.class, new ArrayList<>()).
+            } else {
+                itemMeta.setLore(loreNode.getList(String.class, new ArrayList<>()).
                         stream().map(StringUtils::parseStringToString).collect(Collectors.toList()));
+            }
 
         }
         if (!modelDataNode.virtual()) itemMeta.setCustomModelData(modelDataNode.getInt());
@@ -144,13 +149,14 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         }
 
 
-            if (!itemFlagsNode.virtual()) {
-                for (String itemFlag : itemFlagsNode.getList(String.class)) {
-                    if (!EnumUtils.isValidEnum(ItemFlag.class, itemFlag)) continue;
-                    //MessagesUtil.sendDebugMessages("Added " + itemFlag + " to the item!");
-                    itemMeta.addItemFlags(ItemFlag.valueOf(itemFlag));
-                }
+        if (!itemFlagsNode.virtual()) {
+            itemMeta.setAttributeModifiers(item.getType().getDefaultAttributeModifiers());
+            for (String itemFlag : itemFlagsNode.getList(String.class)) {
+                if (!EnumUtils.isValidEnum(ItemFlag.class, itemFlag)) continue;
+                //MessagesUtil.sendDebugMessages("Added " + itemFlag + " to the item!");
+                itemMeta.addItemFlags(ItemFlag.valueOf(itemFlag));
             }
+        }
 
         if (item.getType() == Material.PLAYER_HEAD) {
             SkullMeta skullMeta = (SkullMeta) itemMeta;
