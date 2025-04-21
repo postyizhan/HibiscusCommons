@@ -41,6 +41,7 @@ public class Hooks {
     private static final HookPlaceholderAPI PAPI_HOOK = new HookPlaceholderAPI();
     private static final HookCustomFishing CF_HOOK = new HookCustomFishing();
     private static final HookGSit GSIT_HOOK = new HookGSit();
+    private static final HookCraftEngine CRAFT_ENGINE_HOOK = new HookCraftEngine();
 
     private static boolean allHooksActive = false;
 

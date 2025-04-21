@@ -61,6 +61,9 @@ allprojects {
         // Oraxen
         maven("https://repo.oraxen.com/releases")
 
+        // Craft Engine
+        maven("https://repo.momirealms.net/releases/")
+
         // Needed for brigadier for dependencies (I
         maven("https://libraries.minecraft.net/")
 
@@ -99,6 +102,8 @@ allprojects {
         compileOnly("org.joml:joml:1.10.8")
         compileOnly("com.google.guava:guava:33.4.0-jre") // Sometimes just not included in compile time???
         compileOnly("com.github.Gecolay.GSit:core:2.0.0")
+        compileOnly("net.momirealms:craft-engine-core:0.0.49")
+        compileOnly("net.momirealms:craft-engine-bukkit:0.0.49")
 
         // Lombok <3
         annotationProcessor("org.projectlombok:lombok:1.18.36")
