@@ -89,6 +89,7 @@ allprojects {
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
         compileOnly("com.denizenscript:denizen:1.2.7-SNAPSHOT")
         compileOnly("io.lumine:Mythic-Dist:5.8.0")
+        compileOnly("com.github.LeonMangler:SuperVanish:6.2.17")
         compileOnly("net.Indyuce:MMOItems-API:6.9.4-SNAPSHOT")
         compileOnly("com.willfp:eco:6.74.5")
         compileOnly("me.clip:placeholderapi:2.11.6")
