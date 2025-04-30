@@ -12,13 +12,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class Hooks {
@@ -30,8 +30,6 @@ public class Hooks {
     private static final HookGeary GEARY_HOOK = new HookGeary();
     private static final HookMythic MYTHIC_HOOK = new HookMythic();
     private static final HookDenizen DENIZEN_HOOK = new HookDenizen();
-    private static final HookPremiumVanish PREMIUM_VANISH_HOOK = new HookPremiumVanish();
-    private static final HookSuperVanish SUPER_VANISH_HOOK = new HookSuperVanish();
     private static final HookHMCColor HMC_COLOR_HOOK = new HookHMCColor();
     private static final HookCMI CMI_HOOK = new HookCMI();
     private static final HookLibsDisguises LIBS_DISGUISES_HOOK = new HookLibsDisguises();
@@ -53,11 +51,11 @@ public class Hooks {
         return HOOK_POOL.containsKey(id.toLowerCase());
     }
 
-    public static void addHook(Hook hook) {
+    public static void addHook(@NotNull Hook hook) {
         HOOK_POOL.put(hook.getId().toLowerCase(), hook);
     }
 
-    public static void addPlaceholderAPI(PlaceholderExpansion expansion) {
+    public static void addPlaceholderAPI(@NotNull PlaceholderExpansion expansion) {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             HookPlaceholderAPI hook = (HookPlaceholderAPI) getHook("PlaceholderAPI");
             hook.registerPlaceholder(expansion);
@@ -133,7 +131,7 @@ public class Hooks {
         return hook.getItem(split[1]);
     }
 
-    public static String getStringItem(ItemStack itemStack) {
+    public static String getStringItem(@NotNull ItemStack itemStack) {
         for (Hook hook : HOOK_POOL.values()) {
             if (hook.isDetected() && hook.hasEnabledItemHook()) {
                 String stringyItem = hook.getItemString(itemStack);
@@ -144,7 +142,7 @@ public class Hooks {
         return itemStack.getType().toString();
     }
 
-    public static String getStringEntity(Entity entity) {
+    public static String getStringEntity(@NotNull Entity entity) {
         for (Hook hook : HOOK_POOL.values()) {
             if (hook.isDetected() && hook.hasEnabledEntityHook()) {
                 String stringyEntity = hook.getEntityString(entity);
@@ -155,19 +153,20 @@ public class Hooks {
         return entity.getType().toString().toUpperCase();
     }
 
-    public static boolean isActiveHook(String id) {
+    public static boolean isActiveHook(@NotNull String id) {
         Hook hook = getHook(id);
         if (hook == null) return false;
         if (!hook.isDetected()) return false;
         return hook.isActive();
     }
 
-    public static boolean isInvisible(UUID uuid) {
-        for (Hook hook : HOOK_POOL.values()) {
-            if (hook.isDetected()) {
-                if (hook.isInvisible(uuid)) return true;
-            }
-        }
-        return false;
+    public static boolean isInvisible(@NotNull UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return false;
+        return isInvisible(player);
+    }
+
+    public static boolean isInvisible(@NotNull Player player) {
+        return player.getMetadata("vanished").getFirst().asBoolean();
     }
 }

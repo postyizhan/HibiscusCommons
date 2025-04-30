@@ -33,11 +33,4 @@ public class HookLibsDisguises extends Hook {
         HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(this, player);
         Bukkit.getPluginManager().callEvent(newEvent);
     }
-
-    @Override
-    public boolean isInvisible(UUID uuid) {
-        Player onlinePlayer = Bukkit.getPlayer(uuid);
-        if (onlinePlayer == null) return false;
-        return DisguiseAPI.isDisguised(onlinePlayer);
-    }
 }
