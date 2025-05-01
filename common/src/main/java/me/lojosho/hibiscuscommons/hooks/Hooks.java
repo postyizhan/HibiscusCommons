@@ -14,6 +14,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -169,6 +170,8 @@ public class Hooks {
     }
 
     public static boolean isInvisible(@NotNull Player player) {
-        return player.getMetadata("vanished").getFirst().asBoolean();
+        List<MetadataValue> metadataValues = player.getMetadata("vanished");
+        if (metadataValues.isEmpty()) return false;
+        return metadataValues.getFirst().asBoolean();
     }
 }
