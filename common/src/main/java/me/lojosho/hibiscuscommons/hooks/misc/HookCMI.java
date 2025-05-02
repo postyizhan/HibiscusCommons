@@ -34,11 +34,4 @@ public class HookCMI extends Hook {
         HibiscusPlayerUnVanishEvent newEvent = new HibiscusPlayerUnVanishEvent(this, event.getPlayer());
         Bukkit.getPluginManager().callEvent(newEvent);
     }
-
-    @Override
-    public boolean isInvisible(UUID uuid) {
-        Player onlinePlayer = Bukkit.getPlayer(uuid);
-        if (onlinePlayer == null) return false;
-        return CMI.getInstance().getVanishManager().getAllVanished().contains(uuid);
-    }
 }
