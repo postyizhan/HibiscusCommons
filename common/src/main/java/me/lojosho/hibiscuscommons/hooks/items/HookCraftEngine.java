@@ -13,6 +13,9 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A hook that integrates the plugin {@link net.momirealms.craftengine.bukkit.plugin.BukkitCraftEngine CraftEngine} to provide custom items
+ */
 public class HookCraftEngine extends Hook {
 
     public HookCraftEngine() {
