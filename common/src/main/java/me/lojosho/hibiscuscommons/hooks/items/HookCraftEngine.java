@@ -4,12 +4,12 @@ import me.lojosho.hibiscuscommons.api.events.HibiscusHookReload;
 import me.lojosho.hibiscuscommons.hooks.Hook;
 import me.lojosho.hibiscuscommons.hooks.HookFlag;
 import net.momirealms.craftengine.bukkit.api.CraftEngineItems;
+import net.momirealms.craftengine.bukkit.api.event.CraftEngineReloadEvent;
 import net.momirealms.craftengine.core.item.CustomItem;
 import net.momirealms.craftengine.core.util.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,9 +39,8 @@ public class HookCraftEngine extends Hook {
     }
 
     @EventHandler
-    public void onPluginEnable(PluginEnableEvent event) {
-        // Move to CraftEngine own event for this? Doesn't seem like they have one for post-initialization? Open for PR
-        if (event.getPlugin().getName().equalsIgnoreCase("CraftEngine") && !isActive()) {
+    public void onPluginEnable(CraftEngineReloadEvent event) {
+        if (!isActive()) {
             setActive(true);
             Bukkit.getPluginManager().callEvent(new HibiscusHookReload(this, HibiscusHookReload.ReloadType.INITIAL));
         }
