@@ -93,4 +93,6 @@ public interface NMSPackets {
                                  List<Player> sendTo);
 
     void sendToastPacket(Player player, ItemStack icon, Component title, Component description);
+
+    Object createMountPacket(int entityId, int[] passengerIds);
 }

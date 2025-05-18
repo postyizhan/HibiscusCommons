@@ -417,4 +417,18 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             sendPacket(player, removePacket);
         }, 2L);
     }
+
+    @Override
+    public Object createMountPacket(int entityId, int[] passengerIds) {
+        fakeNmsEntity.setId(entityId);
+        List<Entity> passengers = Arrays.stream(passengerIds).mapToObj(id -> {
+            Entity passenger = new ArmorStand(net.minecraft.world.entity.EntityType.ARMOR_STAND, level);
+            passenger.setId(id);
+            return passenger;
+        }).toList();
+        fakeNmsEntity.passengers = ImmutableList.copyOf(passengers);
+        ClientboundSetPassengersPacket packet = new ClientboundSetPassengersPacket(fakeNmsEntity);
+        fakeNmsEntity.passengers = ImmutableList.of();
+        return packet;
+    }
 }
