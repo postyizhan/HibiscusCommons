@@ -255,6 +255,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             passenger.setId(id);
             return passenger;
         }).toList();
+        fakeNmsEntity.setId(mountId);
         fakeNmsEntity.passengers = ImmutableList.copyOf(passengers);
         ClientboundSetPassengersPacket packet = new ClientboundSetPassengersPacket(fakeNmsEntity);
         fakeNmsEntity.passengers = ImmutableList.of();
