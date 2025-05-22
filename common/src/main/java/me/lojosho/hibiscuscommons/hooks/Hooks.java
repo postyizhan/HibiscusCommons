@@ -1,5 +1,6 @@
 package me.lojosho.hibiscuscommons.hooks;
 
+import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
@@ -44,6 +45,7 @@ public class Hooks {
     private static final HookPremiumVanish PREMIUM_VANISH_HOOK = new HookPremiumVanish();
     private static final HookSuperVanish SUPER_VANISH_HOOK = new HookSuperVanish();
 
+    @Getter
     private static boolean allHooksActive = false;
 
     public static Hook getHook(@NotNull String id) {
