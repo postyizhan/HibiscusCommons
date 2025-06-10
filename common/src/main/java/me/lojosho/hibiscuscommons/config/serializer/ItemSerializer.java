@@ -150,7 +150,9 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
 
 
         if (!itemFlagsNode.virtual()) {
-            itemMeta.setAttributeModifiers(item.getType().getDefaultAttributeModifiers());
+            if (HibiscusCommonsPlugin.isOnPaper() && NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_20_6)) {
+                itemMeta.setAttributeModifiers(item.getType().getDefaultAttributeModifiers());
+            }
             for (String itemFlag : itemFlagsNode.getList(String.class)) {
                 if (!EnumUtils.isValidEnum(ItemFlag.class, itemFlag)) continue;
                 //MessagesUtil.sendDebugMessages("Added " + itemFlag + " to the item!");
