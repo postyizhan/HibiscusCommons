@@ -112,10 +112,10 @@ allprojects {
         testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 
         // Spigot Auto Loader Libraries
-        compileOnly("net.kyori:adventure-api:4.19.0")
-        compileOnly("net.kyori:adventure-text-minimessage:4.19.0")
-        compileOnly("net.kyori:adventure-text-serializer-gson:4.19.0")
-        compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
+        compileOnly("net.kyori:adventure-api:4.23.0")
+        compileOnly("net.kyori:adventure-text-minimessage:4.23.0")
+        compileOnly("net.kyori:adventure-text-serializer-gson:4.23.0")
+        compileOnly("net.kyori:adventure-platform-bukkit:4.4.0")
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
@@ -230,10 +230,10 @@ bukkit {
     )
 
     libraries = listOf(
-        "net.kyori:adventure-api:4.19.0",
-        "net.kyori:adventure-text-minimessage:4.19.0",
-        "net.kyori:adventure-text-serializer-gson:4.19.0",
-        "net.kyori:adventure-platform-bukkit:4.3.4",
+        "net.kyori:adventure-api:4.23.0",
+        "net.kyori:adventure-text-minimessage:4.23.0",
+        "net.kyori:adventure-text-serializer-gson:4.23.0",
+        "net.kyori:adventure-platform-bukkit:4.4.0",
         "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )
