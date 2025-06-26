@@ -1,36 +1,33 @@
 package me.lojosho.hibiscuscommons.packets;
 
-import me.lojosho.hibiscuscommons.packets.wrapper.ContainerContentWrapper;
-import me.lojosho.hibiscuscommons.packets.wrapper.EntityEquipmentWrapper;
-import me.lojosho.hibiscuscommons.packets.wrapper.PassengerWrapper;
-import me.lojosho.hibiscuscommons.packets.wrapper.SlotContentWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface PacketInterface {
 
-    default PacketAction writeContainerContent(@NotNull Player player, ContainerContentWrapper wrapper) {
+    default PacketAction writeContainerContent(@NotNull Player player, @NotNull ContainerContentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writeSlotContent(@NotNull Player player, SlotContentWrapper wrapper) {
+    default PacketAction writeSlotContent(@NotNull Player player, @NotNull SlotContentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writeEquipmentContent(@NotNull Player player, EntityEquipmentWrapper wrapper) {
+    default PacketAction writeEquipmentContent(@NotNull Player player, @NotNull EntityEquipmentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writePassengerContent(@NotNull Player player, PassengerWrapper wrapper) {
+    default PacketAction writePassengerContent(@NotNull Player player, @NotNull PassengerWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction readInventoryClick(@NotNull Player player, Integer clickType, Integer slotNumber) {
+    default PacketAction readInventoryClick(@NotNull Player player, @NotNull InventoryClickWrapper wrapper) {
         return PacketAction.NOTHING;
         // Override
     }
 
-    default PacketAction readPlayerAction(@NotNull Player player, Integer actionType) {
+    default PacketAction readPlayerAction(@NotNull Player player, @NotNull PlayerActionWrapper wrapper) {
         return PacketAction.NOTHING;
         // Override
     }

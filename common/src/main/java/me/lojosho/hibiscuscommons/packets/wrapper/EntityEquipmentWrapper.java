@@ -11,9 +11,11 @@ import java.util.Map;
 @Getter @Setter
 public class EntityEquipmentWrapper {
 
+    private int entityId;
     private Map<EquipmentSlot, ItemStack> armor;
 
-    public EntityEquipmentWrapper(@NotNull Map<EquipmentSlot, ItemStack> armor) {
+    public EntityEquipmentWrapper(int entityId, @NotNull Map<EquipmentSlot, ItemStack> armor) {
+        this.entityId = entityId;
         this.armor = armor;
     }
 }
