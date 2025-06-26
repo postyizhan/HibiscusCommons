@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.6.3${getGitCommitHash()}"
+version = "0.6.5${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -108,10 +108,10 @@ allprojects {
         testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 
         // Spigot Auto Loader Libraries
-        compileOnly("net.kyori:adventure-api:4.19.0")
-        compileOnly("net.kyori:adventure-text-minimessage:4.19.0")
-        compileOnly("net.kyori:adventure-text-serializer-gson:4.19.0")
-        compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
+        compileOnly("net.kyori:adventure-api:4.23.0")
+        compileOnly("net.kyori:adventure-text-minimessage:4.23.0")
+        compileOnly("net.kyori:adventure-text-serializer-gson:4.23.0")
+        compileOnly("net.kyori:adventure-platform-bukkit:4.4.0")
         compileOnly("org.apache.commons:commons-lang3:3.17.0")
 
         // Shaded Dependencies
@@ -133,6 +133,7 @@ dependencies {
     implementation(project(path = ":v1_21_R2", configuration = "reobf"))
     implementation(project(path = ":v1_21_R3", configuration = "reobf"))
     implementation(project(path = ":v1_21_R4", configuration = "reobf"))
+    implementation(project(path = ":v1_21_R5", configuration = "reobf"))
 }
 
 tasks {
@@ -167,6 +168,7 @@ tasks {
         dependsOn(":v1_21_R2:reobfJar")
         dependsOn(":v1_21_R3:reobfJar")
         dependsOn(":v1_21_R4:reobfJar")
+        dependsOn(":v1_21_R5:reobfJar")
         mergeServiceFiles()
 
         relocate("org.bstats", "me.lojosho.shaded.bstats")
@@ -222,10 +224,10 @@ bukkit {
     )
 
     libraries = listOf(
-        "net.kyori:adventure-api:4.19.0",
-        "net.kyori:adventure-text-minimessage:4.19.0",
-        "net.kyori:adventure-text-serializer-gson:4.19.0",
-        "net.kyori:adventure-platform-bukkit:4.3.4",
+        "net.kyori:adventure-api:4.23.0",
+        "net.kyori:adventure-text-minimessage:4.23.0",
+        "net.kyori:adventure-text-serializer-gson:4.23.0",
+        "net.kyori:adventure-platform-bukkit:4.4.0",
         "org.apache.commons:commons-lang3:3.17.0"
         //"org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT" // Readd when 4.2.0 releases
     )

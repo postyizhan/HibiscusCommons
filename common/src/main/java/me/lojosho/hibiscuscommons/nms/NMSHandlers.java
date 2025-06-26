@@ -19,6 +19,7 @@ public class NMSHandlers {
         put(MinecraftVersion.v1_21_3, "v1_21_R2");
         put(MinecraftVersion.v1_21_4, "v1_21_R3");
         put(MinecraftVersion.v1_21_5, "v1_21_R4");
+        put(MinecraftVersion.v1_21_6, "v1_21_R5");
     }};
 
     private static NMSHandler handler;
