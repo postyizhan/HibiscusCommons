@@ -2,6 +2,7 @@ package me.lojosho.hibiscuscommons.nms;
 
 import org.bukkit.Color;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,5 +18,9 @@ public interface NMSUtils {
     Color getColor(ItemStack itemStack);
 
     ItemStack setColor(@NotNull ItemStack itemStack, Color color);
+
+    default void handleChannelOpen(@NotNull Player player) {
+
+    }
 
 }

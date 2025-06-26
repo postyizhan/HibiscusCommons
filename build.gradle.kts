@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.6.5${getGitCommitHash()}"
+version = "0.7.0${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -144,11 +144,11 @@ tasks {
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.5")
+        minecraftVersion("1.21.6")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
-            url("https://download.luckperms.net/1567/bukkit/loader/LuckPerms-Bukkit-5.4.150.jar")
+            url("https://download.luckperms.net/1593/bukkit/loader/LuckPerms-Bukkit-5.5.8.jar")
         }
     }
 
