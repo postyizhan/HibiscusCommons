@@ -5,10 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +39,10 @@ public interface NMSPackets {
     void sendRotationPacket(int entityId, Location location, boolean onGround, List<Player> sendTo);
 
     void sendSlotUpdate(Player player, int slot);
+
+    default void sendLookAtPacket(int entityId, Location location, List<Player> sendTo) {
+
+    }
 
     void sendEquipmentSlotUpdate(
             int entityId,

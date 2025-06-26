@@ -163,7 +163,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
             case ServerboundContainerClickPacket clickPacket -> msg = handleInventoryClick(clickPacket);
             case ServerboundPlayerActionPacket playerActionPacket -> msg = handlePlayerAction(playerActionPacket);
             case ServerboundSwingPacket swingPacket -> msg = handlePlayerArm(swingPacket);
-            case ServerboundUseItemOnPacket useItemOnPacket -> msg = handleEntityUse(useItemOnPacket);
+            case ServerboundInteractPacket interactPacket -> msg = handleInteract(interactPacket);
             default -> {}
         }
 
@@ -212,7 +212,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         return packet;
     }
 
-    private Packet<?> handleEntityUse(ServerboundUseItemOnPacket packet) {
+    private Packet<?> handleInteract(ServerboundInteractPacket packet) {
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 

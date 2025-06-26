@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -124,6 +125,14 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
 
         ClientboundGameEventPacket packet = new ClientboundGameEventPacket(type, param);
         sendPacket(player, packet);
+    }
+
+    @Override
+    public void sendLookAtPacket(int entityId, Location location, List<Player> sendTo) {
+        fakeNmsEntity.setId(entityId);
+        fakeNmsEntity.getBukkitEntity().teleport(location);
+        ClientboundPlayerLookAtPacket packet = new ClientboundPlayerLookAtPacket(EntityAnchorArgument.Anchor.EYES, fakeNmsEntity, EntityAnchorArgument.Anchor.EYES);
+        for (Player p : sendTo) sendPacket(p, packet);
     }
 
     @Override
