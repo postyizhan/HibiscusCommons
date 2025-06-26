@@ -19,4 +19,8 @@ public interface NMSUtils {
 
     ItemStack setColor(@NotNull ItemStack itemStack, Color color);
 
+    default void handleChannelOpen(@NotNull Player player) {
+
+    }
+
 }

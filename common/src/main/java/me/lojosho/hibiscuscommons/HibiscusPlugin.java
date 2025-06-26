@@ -3,6 +3,10 @@ package me.lojosho.hibiscuscommons;
 import com.jeff_media.updatechecker.UpdateCheckSource;
 import com.jeff_media.updatechecker.UpdateChecker;
 import lombok.Getter;
+import lombok.Setter;
+import me.lojosho.hibiscuscommons.packets.DefaultPacketInterface;
+import me.lojosho.hibiscuscommons.packets.PacketInterface;
+import me.lojosho.hibiscuscommons.plugins.SubPlugins;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +24,8 @@ public abstract class HibiscusPlugin extends JavaPlugin {
     private boolean onLatestVersion = true;
     @Getter
     private boolean disabled = false;
+    @Getter @Setter
+    private PacketInterface packetInterface = new DefaultPacketInterface();
 
     protected HibiscusPlugin() {
         this(-1);
@@ -46,6 +52,8 @@ public abstract class HibiscusPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        SubPlugins.addSubPlugin(this);
 
         if (bstats > 0) {
             Metrics metrics = new Metrics(this, bstats);
@@ -88,6 +96,7 @@ public abstract class HibiscusPlugin extends JavaPlugin {
     @Override
     public final void onDisable() {
         disabled = true;
+        SubPlugins.removeSubPlugin(this);
 
         onEnd();
     }

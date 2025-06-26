@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "me.lojosho"
-version = "0.6.5${getGitCommitHash()}"
+version = "0.7.0${getGitCommitHash()}"
 
 allprojects {
     apply(plugin = "java")
@@ -33,7 +33,7 @@ allprojects {
         maven("https://repo.nexomc.com/snapshots/")
         maven("https://repo.nexomc.com/releases/")
 
-        // Geary & Backup ProtocolLib repo
+        // Geary repo
         maven("https://repo.mineinabyss.com/releases/")
         maven("https://repo.mineinabyss.com/snapshots/")
 
@@ -54,9 +54,6 @@ allprojects {
 
         // PlaceholderAPI
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-
-        // ProtocolLib
-        maven("https://repo.dmulloy2.net/repository/public/")
 
         // Oraxen
         maven("https://repo.oraxen.com/releases")
@@ -83,7 +80,7 @@ allprojects {
         compileOnly("com.mojang:authlib:3.13.56")
         compileOnly("org.jetbrains:annotations:26.0.1")
         compileOnly("io.th0rgal:oraxen:1.182.0")
-        compileOnly("com.nexomc:nexo:1.0.0")
+        compileOnly("com.nexomc:nexo:1.4.0")
         compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.3-beta-14")
         compileOnly("com.mineinabyss:geary-papermc:0.31.0-dev.4")
         compileOnly("it.unimi.dsi:fastutil:8.5.15")
@@ -98,7 +95,6 @@ allprojects {
         }
         compileOnly("com.github.Xiao-MoMi:Custom-Fishing:2.3.3")
         compileOnly("com.ticxo.modelengine:ModelEngine:R4.0.2")
-        compileOnly("com.comphenix.protocol:ProtocolLib:5.3.0")
         compileOnly("org.joml:joml:1.10.8")
         compileOnly("com.google.guava:guava:33.4.0-jre") // Sometimes just not included in compile time???
         compileOnly("com.github.Gecolay.GSit:core:2.0.0")
@@ -148,12 +144,11 @@ tasks {
     runServer {
         dependsOn(shadowJar)
         dependsOn(jar)
-        minecraftVersion("1.21.5")
+        minecraftVersion("1.21.6")
 
         downloadPlugins {
             hangar("PlaceholderAPI", "2.11.6")
-            url("https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/artifact/build/libs/ProtocolLib.jar")
-            url("https://download.luckperms.net/1567/bukkit/loader/LuckPerms-Bukkit-5.4.150.jar")
+            url("https://download.luckperms.net/1593/bukkit/loader/LuckPerms-Bukkit-5.5.8.jar")
         }
     }
 
@@ -205,7 +200,6 @@ bukkit {
     main = "me.lojosho.hibiscuscommons.HibiscusCommonsPlugin"
     apiVersion = "1.20"
     authors = listOf("LoJoSho")
-    depend = listOf("ProtocolLib")
     softDepend = listOf(
         "ModelEngine",
         "Oraxen",
@@ -252,12 +246,6 @@ hangarPublish {
 
                 val versions: List<String> = listOf("1.18.2-1.20.4")
                 platformVersions.set(versions)
-
-                dependencies {
-                    hangar("ProtocolLib") {
-                        required.set(true)
-                    }
-                }
             }
         }
     }

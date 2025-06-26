@@ -2,6 +2,7 @@ package me.lojosho.hibiscuscommons;
 
 import lombok.Getter;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
+import me.lojosho.hibiscuscommons.listener.PlayerConnectionEvent;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.ServerUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -41,6 +42,8 @@ public final class HibiscusCommonsPlugin extends HibiscusPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        getServer().getPluginManager().registerEvents(new PlayerConnectionEvent(), this);
 
         // Plugin startup logic
         Hooks.setup();

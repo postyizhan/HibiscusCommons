@@ -13,5 +13,4 @@ public class NMSCommon {
         ServerPlayerConnection connection = serverPlayer.connection;
         connection.send(packet);
     }
-
 }
