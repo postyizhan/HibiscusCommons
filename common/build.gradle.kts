@@ -1,4 +1,3 @@
-
 // Look into the possibility of splitting off the API portion into its own module? (Probably not worth it right now) - 12/22/23
 
 tasks {
@@ -18,5 +17,5 @@ tasks {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
 }
