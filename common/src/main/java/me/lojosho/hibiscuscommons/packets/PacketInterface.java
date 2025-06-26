@@ -1,28 +1,27 @@
 package me.lojosho.hibiscuscommons.packets;
 
+import me.lojosho.hibiscuscommons.packets.wrapper.ContainerContentWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.EntityEquipmentWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.PassengerWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.SlotContentWrapper;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Map;
 
 public interface PacketInterface {
 
-    default PacketAction writeContainerContent(@NotNull Player player, Integer windowId, @NotNull List<ItemStack> slotData) {
+    default PacketAction writeContainerContent(@NotNull Player player, ContainerContentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writeSlotContent(@NotNull Player player, Integer windowId, Integer slot, @NotNull ItemStack itemStack) {
+    default PacketAction writeSlotContent(@NotNull Player player, SlotContentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writeEquipmentContent(@NotNull Player player, @NotNull Map<EquipmentSlot, ItemStack> armor) {
+    default PacketAction writeEquipmentContent(@NotNull Player player, EntityEquipmentWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 
-    default PacketAction writePassengerContent(@NotNull Player player, Integer owner, List<Integer> passengers) {
+    default PacketAction writePassengerContent(@NotNull Player player, PassengerWrapper wrapper) {
         return PacketAction.NOTHING;
     }
 

@@ -7,6 +7,10 @@ import io.netty.channel.ChannelPromise;
 import lombok.Getter;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.packets.PacketAction;
+import me.lojosho.hibiscuscommons.packets.wrapper.ContainerContentWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.EntityEquipmentWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.PassengerWrapper;
+import me.lojosho.hibiscuscommons.packets.wrapper.SlotContentWrapper;
 import me.lojosho.hibiscuscommons.plugins.SubPlugins;
 import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import net.minecraft.core.NonNullList;
@@ -64,8 +68,8 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().writeContainerContent(player, windowId, bukkitItems);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            PacketAction pluginAction = plugin.getPacketInterface().writeContainerContent(player, new ContainerContentWrapper(windowId, bukkitItems));
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
 
@@ -88,9 +92,8 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().writeSlotContent(player, windowId, slot, bukkitItem);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
-
+            PacketAction pluginAction = plugin.getPacketInterface().writeSlotContent(player, new SlotContentWrapper(windowId, slot, bukkitItem));
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
         });
 
         if (action.get() == PacketAction.CANCELLED) return null;
@@ -102,27 +105,33 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handlePlayerEquipment(@NotNull ClientboundSetEquipmentPacket packet) {
-        final List<Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack>> armor = packet.getSlots();
-        final HashMap<EquipmentSlot, org.bukkit.inventory.ItemStack> bukkitArmor = new HashMap<>();
-        for (Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack> piece : armor) {
+        final List<Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack>> nmsArmor = packet.getSlots();
+        HashMap<EquipmentSlot, org.bukkit.inventory.ItemStack> bukkitArmor = new HashMap<>();
+        for (Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack> piece : nmsArmor) {
             EquipmentSlot slot = CraftEquipmentSlot.getSlot(piece.getFirst());
             org.bukkit.inventory.ItemStack itemStack = CraftItemStack.asBukkitCopy(piece.getSecond());
             bukkitArmor.put(slot, itemStack);
         }
 
+        final var finalArmor = bukkitArmor;
+        AtomicReference<Map<EquipmentSlot, org.bukkit.inventory.ItemStack>> armor = new AtomicReference<>(new HashMap<>());
+
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().writeEquipmentContent(player, bukkitArmor);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
-
+            EntityEquipmentWrapper wrapper = new EntityEquipmentWrapper(finalArmor);
+            PacketAction pluginAction = plugin.getPacketInterface().writeEquipmentContent(player, wrapper);
+            if (pluginAction != PacketAction.NOTHING) {
+                armor.set(wrapper.getArmor());
+                action.set(pluginAction);
+            }
         });
 
         if (action.get() == PacketAction.CANCELLED) return null;
         if (action.get() == PacketAction.NOTHING) return packet;
 
         List<Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack>> newArmor = new ArrayList<>();
-        for (Map.Entry<EquipmentSlot, org.bukkit.inventory.ItemStack> entry : bukkitArmor.entrySet()) {
+        for (Map.Entry<EquipmentSlot, org.bukkit.inventory.ItemStack> entry : armor.get().entrySet()) {
             net.minecraft.world.entity.EquipmentSlot slot = CraftEquipmentSlot.getNMS(entry.getKey());
             ItemStack itemStack = CraftItemStack.asNMSCopy(entry.getValue());
             newArmor.add(new Pair<>(slot, itemStack));
@@ -139,8 +148,8 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().writePassengerContent(player, ownerId, passengers);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            PacketAction pluginAction = plugin.getPacketInterface().writePassengerContent(player, new PassengerWrapper(ownerId, passengers));
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
 
@@ -176,7 +185,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
             PacketAction pluginAction = plugin.getPacketInterface().readInventoryClick(player, clickType.id(), slotClicked);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
         if (action.get() == PacketAction.CANCELLED) return null;
@@ -190,7 +199,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
             PacketAction pluginAction = plugin.getPacketInterface().readPlayerAction(player, playerAction.ordinal());
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
         if (action.get() == PacketAction.CANCELLED) return null;
@@ -202,7 +211,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
             PacketAction pluginAction = plugin.getPacketInterface().readPlayerArm(player);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
         if (action.get() == PacketAction.CANCELLED) return null;
@@ -214,7 +223,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
             PacketAction pluginAction = plugin.getPacketInterface().readEntityHandle(player);
-            if (pluginAction != PacketAction.NOTHING) action.set(PacketAction.CANCELLED);
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
         if (action.get() == PacketAction.CANCELLED) return null;
