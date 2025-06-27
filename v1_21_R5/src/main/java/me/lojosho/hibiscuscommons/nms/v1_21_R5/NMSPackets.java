@@ -10,6 +10,7 @@ import io.papermc.paper.adventure.PaperAdventure;
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.util.AdventureUtils;
+import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.Advancement;
@@ -145,10 +146,11 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     }
 
     @Override
-    public void sendRotationPacket(int entityId, float yaw, float pitch, boolean onGround, List<Player> sendTo) {
+    public void sendRotationPacket(int entityId, float originalYaw, float pitch, boolean onGround, List<Player> sendTo) {
         float ROTATION_FACTOR = 256.0F / 360.0F;
-        yaw = (byte) (yaw * ROTATION_FACTOR);
+        byte yaw = (byte) (originalYaw * ROTATION_FACTOR);
         pitch = (byte) (pitch * ROTATION_FACTOR);
+        MessagesUtil.sendDebugMessages("sendRotationPacket. Original: " + originalYaw + " modified: "  + yaw);
         ClientboundMoveEntityPacket.Rot packet = new ClientboundMoveEntityPacket.Rot(entityId, (byte) yaw, (byte) pitch, onGround);
         for (Player p : sendTo) sendPacket(p, packet);
     }

@@ -54,13 +54,20 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handleMenuChange(@NotNull ClientboundContainerSetContentPacket packet) {
+        MessagesUtil.sendDebugMessages("ClientboundContainerSetContentPacket");
         MessagesUtil.sendDebugMessages("Menu Initial ");
 
         Integer windowId = packet.containerId();
-        NonNullList<ItemStack> slotData = NonNullList.create();
-        slotData.addAll(packet.items());
+        List<ItemStack> slotData = packet.items();
 
-        List<org.bukkit.inventory.ItemStack> bukkitItems = slotData.stream().map(CraftItemStack::asBukkitCopy).toList();
+        List<org.bukkit.inventory.ItemStack> bukkitItems = new ArrayList<>();
+        for (ItemStack nmsItem : slotData) {
+            if (nmsItem == null) {
+                slotData.add(null);
+                continue;
+            }
+            bukkitItems.add(CraftItemStack.asBukkitCopy(nmsItem));
+        }
 
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         ContainerContentWrapper wrapper = new ContainerContentWrapper(windowId, bukkitItems);
@@ -72,12 +79,20 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
 
         if (action.get() == PacketAction.CANCELLED) return null;
         if (action.get() == PacketAction.NOTHING) return packet;
-        List<ItemStack> nmsItems = wrapper.getSlotData().stream().map(CraftItemStack::asNMSCopy).toList();
+        List<ItemStack> nmsItems = new ArrayList<>();
+        for (org.bukkit.inventory.ItemStack bukkitItem : bukkitItems) {
+            if (bukkitItem == null) {
+                slotData.add(null);
+                continue;
+            }
+            nmsItems.add(CraftItemStack.asNMSCopy(bukkitItem));
+        }
+
         return new ClientboundContainerSetContentPacket(0, packet.stateId(), nmsItems, packet.carriedItem());
     }
 
     private Packet<?> handleSlotChange(@NotNull ClientboundContainerSetSlotPacket packet) {
-        MessagesUtil.sendDebugMessages("SetSlot Initial ");
+        MessagesUtil.sendDebugMessages("ClientboundContainerSetSlotPacket");
 
         final int windowId = packet.getContainerId();
         final int slot = packet.getSlot();
@@ -98,10 +113,11 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
 
         final ItemStack nmsItem = CraftItemStack.asNMSCopy(wrapper.getItemStack());
 
-        return new ClientboundContainerSetSlotPacket(0, packet.getStateId(), wrapper.getSlot(), nmsItem);
+        return new ClientboundContainerSetSlotPacket(packet.getContainerId(), packet.getStateId(), wrapper.getSlot(), nmsItem);
     }
 
     private Packet<?> handlePlayerEquipment(@NotNull ClientboundSetEquipmentPacket packet) {
+        MessagesUtil.sendDebugMessages("ClientboundSetEquipmentPacket");
         final List<Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack>> nmsArmor = packet.getSlots();
         final int entity = packet.getEntity();
         HashMap<EquipmentSlot, org.bukkit.inventory.ItemStack> bukkitArmor = new HashMap<>();
@@ -122,7 +138,6 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         if (action.get() == PacketAction.CANCELLED) return null;
         if (action.get() == PacketAction.NOTHING) return packet;
 
-
         List<Pair<net.minecraft.world.entity.EquipmentSlot, ItemStack>> newArmor = new ArrayList<>();
         for (Map.Entry<EquipmentSlot, org.bukkit.inventory.ItemStack> entry : wrapper.getArmor().entrySet()) {
             net.minecraft.world.entity.EquipmentSlot slot = CraftEquipmentSlot.getNMS(entry.getKey());
@@ -134,6 +149,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handlePassengerSet(@NotNull ClientboundSetPassengersPacket packet) {
+        MessagesUtil.sendDebugMessages("ClientboundSetPassengersPacket");
         int ownerId = packet.getVehicle();
         List<Integer> passengers = Arrays.stream(packet.getPassengers()).boxed().collect(Collectors.toList());
         MessagesUtil.sendDebugMessages("Mount Packet Sent - Read - EntityID: " + ownerId);
@@ -172,6 +188,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handleInventoryClick(@NotNull ServerboundContainerClickPacket packet) {
+        MessagesUtil.sendDebugMessages("ServerboundContainerClickPacket");
         ClickType clickType = packet.clickType();
         int slotClicked = packet.slotNum();
 
@@ -187,6 +204,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handlePlayerAction(ServerboundPlayerActionPacket packet) {
+        MessagesUtil.sendDebugMessages("ServerboundPlayerActionPacket");
         ServerboundPlayerActionPacket.Action playerAction = packet.getAction();
 
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
@@ -201,6 +219,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handlePlayerArm(ServerboundSwingPacket packet) {
+        MessagesUtil.sendDebugMessages("ServerboundSwingPacket");
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
@@ -213,6 +232,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
     }
 
     private Packet<?> handleInteract(ServerboundInteractPacket packet) {
+        MessagesUtil.sendDebugMessages("ServerboundInteractPacket");
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
