@@ -32,12 +32,12 @@ public interface PacketInterface {
         // Override
     }
 
-    default PacketAction readPlayerArm(@NotNull Player player) {
+    default PacketAction readPlayerArm(@NotNull Player player, @NotNull PlayerSwingWrapper wrapper) {
         return PacketAction.NOTHING;
         // Override
     }
 
-    default PacketAction readEntityHandle(@NotNull Player player) {
+    default PacketAction readEntityHandle(@NotNull Player player, @NotNull PlayerInteractWrapper wrapper) {
         return PacketAction.NOTHING;
         // Override
     }

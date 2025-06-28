@@ -10,7 +10,6 @@ import me.lojosho.hibiscuscommons.packets.PacketAction;
 import me.lojosho.hibiscuscommons.packets.wrapper.*;
 import me.lojosho.hibiscuscommons.plugins.SubPlugins;
 import me.lojosho.hibiscuscommons.util.MessagesUtil;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.inventory.ClickType;
@@ -79,6 +78,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
 
         if (action.get() == PacketAction.CANCELLED) return null;
         if (action.get() == PacketAction.NOTHING) return packet;
+
         List<ItemStack> nmsItems = new ArrayList<>();
         for (org.bukkit.inventory.ItemStack bukkitItem : bukkitItems) {
             if (bukkitItem == null) {
@@ -88,7 +88,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
             nmsItems.add(CraftItemStack.asNMSCopy(bukkitItem));
         }
 
-        return new ClientboundContainerSetContentPacket(0, packet.stateId(), nmsItems, packet.carriedItem());
+        return new ClientboundContainerSetContentPacket(wrapper.getWindowId(), packet.stateId(), nmsItems, packet.carriedItem());
     }
 
     private Packet<?> handleSlotChange(@NotNull ClientboundContainerSetSlotPacket packet) {
@@ -218,12 +218,14 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         return packet;
     }
 
-    private Packet<?> handlePlayerArm(ServerboundSwingPacket packet) {
+    private Packet<?> handlePlayerArm(@NotNull ServerboundSwingPacket packet) {
         MessagesUtil.sendDebugMessages("ServerboundSwingPacket");
+        PlayerSwingWrapper wrapper = new PlayerSwingWrapper(packet.getHand().name());
+
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().readPlayerArm(player);
+            PacketAction pluginAction = plugin.getPacketInterface().readPlayerArm(player, wrapper);
             if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });
@@ -231,12 +233,15 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         return packet;
     }
 
-    private Packet<?> handleInteract(ServerboundInteractPacket packet) {
+    private Packet<?> handleInteract(@NotNull ServerboundInteractPacket packet) {
         MessagesUtil.sendDebugMessages("ServerboundInteractPacket");
+
+        PlayerInteractWrapper wrapper = new PlayerInteractWrapper(packet.getEntityId());
+
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
         SubPlugins.getSubPlugins().forEach(plugin -> {
 
-            PacketAction pluginAction = plugin.getPacketInterface().readEntityHandle(player);
+            PacketAction pluginAction = plugin.getPacketInterface().readEntityHandle(player, wrapper);
             if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
 
         });

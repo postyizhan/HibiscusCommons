@@ -1,14 +1,14 @@
 package me.lojosho.hibiscuscommons.packets.wrapper;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
-@Getter @Setter
 public class PlayerActionWrapper {
 
-    private String actionType;
+    @Getter
+    private final String actionType;
 
-    public PlayerActionWrapper(String actionType) {
+    public PlayerActionWrapper(@NotNull String actionType) {
         this.actionType = actionType;
     }
 }
