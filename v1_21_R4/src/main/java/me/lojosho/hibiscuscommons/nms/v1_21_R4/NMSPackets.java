@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import io.papermc.paper.adventure.AdventureComponent;
@@ -17,6 +18,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -89,13 +91,21 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             final List<Player> sendTo
     ) {
         ServerPlayer player = ((CraftPlayer) skinnedPlayer).getHandle();
-        String name = npcName.substring(0, 15);
+        String name = npcName;
+        if (name.length() > 15) name = name.substring(0, 15);
+        Property property = ((CraftPlayer) skinnedPlayer).getProfile().getProperties().get("textures").stream().findAny().orElse(null);
+
         GameProfile profile = new GameProfile(uuid, name);
+        profile.getProperties().put("textures", property);
 
         Component component = AdventureUtils.MINI_MESSAGE.deserialize(name);
         net.minecraft.network.chat.Component nmsComponent = HibiscusCommonsPlugin.isOnPaper() ? PaperAdventure.asVanilla(component) : net.minecraft.network.chat.Component.literal(name);
 
-        ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(uuid, profile, false, 0, GameType.CREATIVE, nmsComponent, true, player.listOrder, player.getChatSession().asData());
+        RemoteChatSession.Data chatData = null;
+        RemoteChatSession session = player.getChatSession();
+        if (session != null) chatData = player.getChatSession().asData();
+
+        ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(uuid, profile, false, 0, GameType.CREATIVE, nmsComponent, true, player.listOrder, chatData);
         EnumSet<ClientboundPlayerInfoUpdatePacket.Action> actions = EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER);
         ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(actions, entry);
         for (Player p : sendTo) sendPacket(p, packet);
