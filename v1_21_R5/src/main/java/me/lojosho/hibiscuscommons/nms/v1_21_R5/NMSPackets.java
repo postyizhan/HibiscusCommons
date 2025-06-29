@@ -35,10 +35,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -428,6 +425,11 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
                 }
 
                 components.add("minecraft:custom_model_data", customModelDataComponentJson);
+            }
+
+            NamespacedKey itemModel = meta.getItemModel();
+            if (itemModel != null) {
+                components.addProperty("minecraft:item_model", itemModel.toString());
             }
 
             iconObj.add("components", components);
