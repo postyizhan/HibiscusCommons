@@ -5,7 +5,6 @@ import io.papermc.paper.registry.RegistryKey;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
 import me.lojosho.hibiscuscommons.nms.MinecraftVersion;
-import me.lojosho.hibiscuscommons.nms.NMSHandler;
 import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.*;
 import org.apache.commons.lang3.EnumUtils;
@@ -28,7 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ItemSerializer implements TypeSerializer<ItemStack> {
 
@@ -87,43 +85,25 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) return item;
 
+        ItemBuilder itemBuilder = new ItemBuilder(item, itemMeta);
+
         if (!nameNode.virtual()) {
-            if (HibiscusCommonsPlugin.isOnPaper()) {
-                itemMeta.displayName(AdventureUtils.MINI_MESSAGE.deserialize(nameNode.getString("")));
-            } else {
-                itemMeta.setDisplayName(StringUtils.parseStringToString(nameNode.getString("")));
-            }
+            itemBuilder.setDisplayName(nameNode.getString(""));
         }
-        if (!unbreakableNode.virtual()) itemMeta.setUnbreakable(unbreakableNode.getBoolean());
+        if (!unbreakableNode.virtual()) {
+            itemBuilder.setUnbreakable(unbreakableNode.getBoolean(false));
+        }
         if (!glowingNode.virtual()) {
-            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
+            itemBuilder.setGlowing(true);
         }
         if (!loreNode.virtual()) {
-            if (HibiscusCommonsPlugin.isOnPaper()) {
-                itemMeta.lore(loreNode.getList(String.class, new ArrayList<>()).
-                        stream().map(AdventureUtils.MINI_MESSAGE::deserialize).collect(Collectors.toList()));
-            } else {
-                itemMeta.setLore(loreNode.getList(String.class, new ArrayList<>()).
-                        stream().map(StringUtils::parseStringToString).collect(Collectors.toList()));
-            }
-
+            itemBuilder.setLore(loreNode.getList(String.class, new ArrayList<>()));
         }
-        if (!modelDataNode.virtual()) itemMeta.setCustomModelData(modelDataNode.getInt());
-        if (NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_21_4) && !modelIdNode.virtual()) {
-            String itemModelId = modelIdNode.getString("");
-            String stringKey = HibiscusCommonsPlugin.getInstance().getName();
-            if (itemModelId.contains(":")) {
-                String[] split = itemModelId.split(":");
-                itemModelId = split[1];
-                stringKey = split[0];
-            }
-            if (!itemModelId.isEmpty()) {
-                NamespacedKey key = new NamespacedKey(stringKey, itemModelId);
-                itemMeta.setItemModel(key);
-            } else {
-                MessagesUtil.sendDebugMessages("Could not find item model id for " + stringKey + " in " + itemModelId);
-            }
+        if (!modelDataNode.virtual()) {
+            itemBuilder.setCustomModelId(modelDataNode.getInt());
+        }
+        if (!modelIdNode.virtual()) {
+            itemBuilder.setModelItemId(modelIdNode.getString(""));
         }
 
         if (!nbtNode.virtual()) {
@@ -135,19 +115,14 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         if (!enchantsNode.virtual()) {
             for (ConfigurationNode enchantNode : enchantsNode.childrenMap().values()) {
                 String enchantName = enchantNode.key().toString().toLowerCase();
-                NamespacedKey key = NamespacedKey.minecraft(enchantName);
-                Enchantment enchant = null;
-
-                if (HibiscusCommonsPlugin.isOnPaper() && NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_21_4)) {
-                    enchant = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
-                } else {
-                    enchant = Registry.ENCHANTMENT.get(key);
-                }
-                if (enchant == null) continue;
-                itemMeta.addEnchant(enchant, enchantNode.getInt(1), true);
+                int level = enchantNode.getInt(1);
+                itemBuilder.addEnchantment(enchantName, level);
             }
         }
 
+        item = itemBuilder.build();
+        itemMeta = item.getItemMeta();
+        // A few more specific misc things
 
         if (!itemFlagsNode.virtual()) {
             if (HibiscusCommonsPlugin.isOnPaper() && NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_20_6)) {
