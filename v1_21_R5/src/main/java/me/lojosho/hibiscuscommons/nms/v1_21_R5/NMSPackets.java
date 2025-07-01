@@ -257,6 +257,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
         //Adding players to the team (You have to use the NPC's name, and add it to a list)
         ClientboundSetPlayerTeamPacket createPlayerTeamPacket = ClientboundSetPlayerTeamPacket.createMultiplePlayerPacket(team, new ArrayList<String>() {{
             add(name);
+            add(player.getName());
         }}, ClientboundSetPlayerTeamPacket.Action.ADD);
         sendPacket(player, createPlayerTeamPacket);
     }
