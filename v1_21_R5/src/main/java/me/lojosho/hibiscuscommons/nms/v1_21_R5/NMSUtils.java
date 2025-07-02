@@ -5,16 +5,22 @@ import io.netty.channel.ChannelPipeline;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.DyedItemColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
 
 public class NMSUtils extends NMSCommon implements me.lojosho.hibiscuscommons.nms.NMSUtils {
 
@@ -42,8 +48,17 @@ public class NMSUtils extends NMSCommon implements me.lojosho.hibiscuscommons.nm
     }
 
     @Override
-    public ItemStack setColor(@NotNull ItemStack itemStack, Color color) {
+    public ItemStack setColor(@NotNull ItemStack itemStack, @NotNull Color color) {
         net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+        // Potions needs a bit extra to get the color working properly
+        if (itemStack.getType() == Material.POTION) {
+            nmsStack.set(DataComponents.POTION_CONTENTS, new PotionContents(
+                    Optional.empty(),
+                    Optional.of(color.asRGB()),
+                    List.of(),
+                    Optional.empty())
+            );
+        }
         nmsStack.set(DataComponents.DYED_COLOR, new DyedItemColor(color.asRGB()));
         return CraftItemStack.asBukkitCopy(nmsStack);
     }
