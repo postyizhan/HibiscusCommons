@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 public class MessagesUtil {
 
-    private static boolean debug = false;
+    private static boolean debug = true;
 
 
     public static void sendDebugMessages(String message) {

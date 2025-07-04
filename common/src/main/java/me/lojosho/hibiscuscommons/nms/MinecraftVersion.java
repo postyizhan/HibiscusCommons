@@ -6,11 +6,14 @@ import org.jetbrains.annotations.Nullable;
 public enum MinecraftVersion {
     v1_20_4,
     v1_20_6,
+    v1_21,
     v1_21_1,
+    v1_21_2,
     v1_21_3,
     v1_21_4,
     v1_21_5,
     v1_21_6,
+    v1_21_7,
     ;
 
     public boolean isHigher(MinecraftVersion other) {
