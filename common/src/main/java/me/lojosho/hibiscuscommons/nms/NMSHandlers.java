@@ -65,9 +65,11 @@ public class NMSHandlers {
 
             version = selectedVersion.getKey();
 
-            if (!selectedVersion.getValue().supported()) {
+            if (!packageVersion.supported()) {
                 HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Deprecated Version!");
                 HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
+                HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Bukkit Version: " + bukkitVersion);
+                HibiscusCommonsPlugin.getInstance().getLogger().severe("Detected Minecraft Version: " + minecraftVersion);
                 HibiscusCommonsPlugin.getInstance().getLogger().severe("Package Version: " + packageVersion.internalReference());
                 HibiscusCommonsPlugin.getInstance().getLogger().severe("Is Supported: " + packageVersion.supported());
                 HibiscusCommonsPlugin.getInstance().getLogger().severe(" ");
