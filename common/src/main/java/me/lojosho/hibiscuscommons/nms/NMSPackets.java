@@ -83,6 +83,8 @@ public interface NMSPackets {
 
     void sendEntityDestroyPacket(IntList entityIds, List<Player> sendTo);
 
+    void sendEntityScalePacket(int entityId, double scale, List<Player> sendTo);
+
     void sendItemDisplayMetadata(int entityId,
                                  Vector3f translation,
                                  Vector3f scale,
