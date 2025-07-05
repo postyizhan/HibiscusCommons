@@ -182,7 +182,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         }
 
         AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
-        PlayerScaleWrapper wrapper = new PlayerScaleWrapper(nmsScaleAttribute.base());
+        PlayerScaleWrapper wrapper = new PlayerScaleWrapper(packet.getEntityId(), nmsScaleAttribute.base());
 
         SubPlugins.getSubPlugins().forEach(plugin -> {
             PacketAction pluginAction = plugin.getPacketInterface().readPlayerScale(player, wrapper);
