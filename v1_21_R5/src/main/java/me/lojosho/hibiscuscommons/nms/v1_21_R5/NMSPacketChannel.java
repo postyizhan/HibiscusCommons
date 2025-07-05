@@ -12,6 +12,7 @@ import me.lojosho.hibiscuscommons.plugins.SubPlugins;
 import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
@@ -45,6 +46,7 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
             case ClientboundContainerSetSlotPacket setSlotPacket -> msg = handleSlotChange(setSlotPacket);
             case ClientboundSetEquipmentPacket equipmentPacket -> msg = handlePlayerEquipment(equipmentPacket);
             case ClientboundSetPassengersPacket passengerPacket -> msg = handlePassengerSet(passengerPacket);
+            case ClientboundUpdateAttributesPacket attributesPacket -> msg = handleScaleChange(attributesPacket);
             default -> {}
         }
 
@@ -166,6 +168,30 @@ public class NMSPacketChannel extends ChannelDuplexHandler {
         if (action.get() == PacketAction.CANCELLED) return null;
         if (action.get() == PacketAction.NOTHING) return packet;
         return (Packet<?>) NMSHandlers.getHandler().getPacketHandler().createMountPacket(ownerId, passengers.stream().mapToInt(Integer::intValue).toArray());
+    }
+
+    private Packet<?> handleScaleChange(@NotNull ClientboundUpdateAttributesPacket packet) {
+        final List<ClientboundUpdateAttributesPacket.AttributeSnapshot> nmsAttributes = packet.getValues();
+        final ClientboundUpdateAttributesPacket.AttributeSnapshot nmsScaleAttribute = nmsAttributes.stream()
+            .filter(attribute -> attribute.attribute().equals(Attributes.SCALE))
+            .findFirst()
+            .orElse(null);
+
+        if (nmsScaleAttribute == null) {
+            return packet;
+        }
+
+        AtomicReference<PacketAction> action = new AtomicReference<>(PacketAction.NOTHING);
+        PlayerScaleWrapper wrapper = new PlayerScaleWrapper(nmsScaleAttribute.base());
+
+        SubPlugins.getSubPlugins().forEach(plugin -> {
+            PacketAction pluginAction = plugin.getPacketInterface().readPlayerScale(player, wrapper);
+            if (pluginAction != PacketAction.NOTHING) action.set(pluginAction);
+        });
+
+        if (action.get() == PacketAction.CANCELLED) return null;
+        if (action.get() == PacketAction.NOTHING) return packet;
+        return packet;
     }
 
     @Override
