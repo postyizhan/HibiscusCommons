@@ -26,6 +26,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.GameType;
@@ -325,6 +327,18 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     @Override
     public void sendEntityDestroyPacket(IntList entityIds, List<Player> sendTo) {
         ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(entityIds);
+        for (Player p : sendTo) sendPacket(p, packet);
+    }
+
+    @Override
+    public void sendEntityScalePacket(int entityId, double scale, List<Player> sendTo) {
+        AttributeInstance attribute = new AttributeInstance(
+            Attributes.SCALE,
+            (ignored) -> {}
+        );
+        attribute.setBaseValue(scale);
+
+        ClientboundUpdateAttributesPacket packet = new ClientboundUpdateAttributesPacket(entityId, List.of(attribute));
         for (Player p : sendTo) sendPacket(p, packet);
     }
 
