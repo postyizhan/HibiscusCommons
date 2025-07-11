@@ -131,7 +131,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     @Override
     public void sendGamemodeChange(Player player, GameMode gameMode) {
         ClientboundGameEventPacket.Type type = ClientboundGameEventPacket.CHANGE_GAME_MODE;
-        float param = gameMode.ordinal();
+        float param = gameMode.getValue();
 
         ClientboundGameEventPacket packet = new ClientboundGameEventPacket(type, param);
         sendPacket(player, packet);
