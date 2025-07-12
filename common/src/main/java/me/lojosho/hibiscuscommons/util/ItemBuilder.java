@@ -65,7 +65,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setCustomModelId(int number) {
-        if (onPaper) {
+        if (onPaper && NMSHandlers.getVersion().isHigherOrEqual(MinecraftVersion.v1_21_5)) {
             CustomModelDataComponent modelDataComponent = itemMeta.getCustomModelDataComponent();
             modelDataComponent.setFloats(List.of((float) number));
             itemMeta.setCustomModelDataComponent(modelDataComponent);
