@@ -1,6 +1,7 @@
 package me.lojosho.hibiscuscommons.nms.v1_21_R1;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -9,15 +10,17 @@ import com.mojang.serialization.JsonOps;
 import io.papermc.paper.adventure.PaperAdventure;
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
+import me.lojosho.hibiscuscommons.nms.v1_21_R1.NMSCommon;
 import me.lojosho.hibiscuscommons.util.AdventureUtils;
+import me.lojosho.hibiscuscommons.util.MessagesUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
@@ -34,9 +37,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -139,6 +140,14 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     }
 
     @Override
+    public void sendLookAtPacket(int entityId, Location location, List<Player> sendTo) {
+        fakeNmsEntity.setId(entityId);
+        fakeNmsEntity.getBukkitEntity().teleport(location);
+        ClientboundPlayerLookAtPacket packet = new ClientboundPlayerLookAtPacket(EntityAnchorArgument.Anchor.EYES, fakeNmsEntity, EntityAnchorArgument.Anchor.EYES);
+        for (Player p : sendTo) sendPacket(p, packet);
+    }
+
+    @Override
     public void sendRotateHeadPacket(int entityId, Location location, List<Player> sendTo) {
         fakeNmsEntity.setId(entityId);
         byte headRot = (byte) (location.getYaw() * 256.0F / 360.0F);
@@ -148,10 +157,11 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
     }
 
     @Override
-    public void sendRotationPacket(int entityId, float yaw, float pitch, boolean onGround, List<Player> sendTo) {
+    public void sendRotationPacket(int entityId, float originalYaw, float pitch, boolean onGround, List<Player> sendTo) {
         float ROTATION_FACTOR = 256.0F / 360.0F;
-        yaw = (byte) (yaw * ROTATION_FACTOR);
+        byte yaw = (byte) (originalYaw * ROTATION_FACTOR);
         pitch = (byte) (pitch * ROTATION_FACTOR);
+        MessagesUtil.sendDebugMessages("sendRotationPacket. Original: " + originalYaw + " modified: "  + yaw);
         ClientboundMoveEntityPacket.Rot packet = new ClientboundMoveEntityPacket.Rot(entityId, (byte) yaw, (byte) pitch, onGround);
         for (Player p : sendTo) sendPacket(p, packet);
     }
@@ -251,9 +261,11 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
         //Adding players to the team (You have to use the NPC's name, and add it to a list)
         ClientboundSetPlayerTeamPacket createPlayerTeamPacket = ClientboundSetPlayerTeamPacket.createMultiplePlayerPacket(team, new ArrayList<String>() {{
             add(name);
+            add(player.getName());
         }}, ClientboundSetPlayerTeamPacket.Action.ADD);
         sendPacket(player, createPlayerTeamPacket);
     }
+
 
     @Override
     public void sendMountPacket(int mountId, int[] passengerIds, List<Player> sendTo) {
@@ -262,6 +274,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             passenger.setId(id);
             return passenger;
         }).toList();
+        fakeNmsEntity.setId(mountId);
         fakeNmsEntity.passengers = ImmutableList.copyOf(passengers);
         ClientboundSetPassengersPacket packet = new ClientboundSetPassengersPacket(fakeNmsEntity);
         fakeNmsEntity.passengers = ImmutableList.of();
@@ -292,12 +305,15 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
             boolean onGround,
             List<Player> sendTo
     ) {
-        fakeNmsEntity.setId(entityId);
-        fakeNmsEntity.setRot((yaw * 256.0F / 360.0F), (pitch * 256.0F / 360.0F));
-        fakeNmsEntity.setOnGround(onGround);
+        try {
+            fakeNmsEntity.setId(entityId);
+            fakeNmsEntity.teleportTo(x, y, z);
 
-        ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(fakeNmsEntity);
-        for (Player p : sendTo) sendPacket(p, packet);
+            ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(fakeNmsEntity);
+            for (Player p : sendTo) sendPacket(p, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -307,6 +323,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
         ClientboundSetCameraPacket packet = new ClientboundSetCameraPacket(fakeNmsEntity);
         for (Player p : sendTo) sendPacket(p, packet);
     }
+
 
     @Override
     public void sendSpawnEntityPacket(int entityId, UUID uuid, EntityType entityType, Location location, List<Player> sendTo) {
