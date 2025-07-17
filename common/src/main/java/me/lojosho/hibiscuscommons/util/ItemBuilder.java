@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -142,6 +143,11 @@ public class ItemBuilder {
         }
         if (enchant == null) return this;
         addEnchantment(enchant, level);
+        return this;
+    }
+
+    public ItemBuilder setToolTip(@Nullable NamespacedKey key) {
+        itemMeta.setTooltipStyle(key);
         return this;
     }
 

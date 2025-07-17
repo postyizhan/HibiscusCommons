@@ -1,7 +1,5 @@
 package me.lojosho.hibiscuscommons.config.serializer;
 
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import me.lojosho.hibiscuscommons.HibiscusCommonsPlugin;
 import me.lojosho.hibiscuscommons.hooks.Hooks;
 import me.lojosho.hibiscuscommons.nms.MinecraftVersion;
@@ -9,7 +7,6 @@ import me.lojosho.hibiscuscommons.nms.NMSHandlers;
 import me.lojosho.hibiscuscommons.util.*;
 import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,6 +34,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
     private static final String UNBREAKABLE = "unbreakable";
     private static final String GLOWING = "glowing";
     private static final String LORE = "lore";
+    private static final String TOOLTIP_STYLE = "tooltip-style";
     private static final String MODEL_DATA = "model-data";
     private static final String MODEL_ID = "model-id";
     private static final String NBT_TAGS = "nbt-tag";
@@ -61,6 +59,7 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         final ConfigurationNode unbreakableNode = source.node(UNBREAKABLE);
         final ConfigurationNode glowingNode = source.node(GLOWING);
         final ConfigurationNode loreNode = source.node(LORE);
+        final ConfigurationNode toolTipStyleNode = source.node(TOOLTIP_STYLE);
         final ConfigurationNode modelDataNode = source.node(MODEL_DATA);
         final ConfigurationNode modelIdNode = source.node(MODEL_ID);
         final ConfigurationNode nbtNode = source.node(NBT_TAGS);
@@ -104,6 +103,9 @@ public class ItemSerializer implements TypeSerializer<ItemStack> {
         }
         if (!modelIdNode.virtual()) {
             itemBuilder.setModelItemId(modelIdNode.getString(""));
+        }
+        if (!toolTipStyleNode.virtual()) {
+            itemBuilder.setToolTip(NamespacedKey.fromString(toolTipStyleNode.getString("")));
         }
 
         if (!nbtNode.virtual()) {
