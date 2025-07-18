@@ -14,6 +14,7 @@ public enum MinecraftVersion {
     v1_21_5,
     v1_21_6,
     v1_21_7,
+    v1_21_8,
     ;
 
     public boolean isHigher(MinecraftVersion other) {
