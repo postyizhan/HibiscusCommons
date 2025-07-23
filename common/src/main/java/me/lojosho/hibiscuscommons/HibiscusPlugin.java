@@ -88,6 +88,9 @@ public abstract class HibiscusPlugin extends JavaPlugin {
                 .setNotifyRequesters(false)
                 .setNotifyOpsOnJoin(false)
                 .checkEveryXHours(24)
+                .onFail((o, o2) -> {
+                    getLogger().warning("Unable to connection to Polymart to check for updates.");
+                })
                 .checkNow();
         onLatestVersion = checker.isUsingLatestVersion();
     }
