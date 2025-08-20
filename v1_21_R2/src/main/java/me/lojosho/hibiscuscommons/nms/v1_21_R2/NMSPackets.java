@@ -94,7 +94,7 @@ public class NMSPackets extends NMSCommon implements me.lojosho.hibiscuscommons.
         Property property = ((CraftPlayer) skinnedPlayer).getProfile().getProperties().get("textures").stream().findAny().orElse(null);
 
         GameProfile profile = new GameProfile(uuid, name);
-        profile.getProperties().put("textures", property);
+        if (property != null) profile.getProperties().put("textures", property);
 
         Component component = AdventureUtils.MINI_MESSAGE.deserialize(name);
         net.minecraft.network.chat.Component nmsComponent = HibiscusCommonsPlugin.isOnPaper() ? PaperAdventure.asVanilla(component) : net.minecraft.network.chat.Component.literal(name);
