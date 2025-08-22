@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class ItemBuilder {
 
     private final ItemStack itemStack;
     private final ItemMeta itemMeta;
-    private final boolean onPaper;
+    private final boolean onPaper = HibiscusCommonsPlugin.isOnPaper();
     @Getter
     private final Material material;
 
@@ -32,14 +33,18 @@ public class ItemBuilder {
         this.material = material;
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
-        this.onPaper = HibiscusCommonsPlugin.isOnPaper();
+    }
+
+    public ItemBuilder(@NotNull ItemStack itemStack) {
+        this.itemStack = itemStack;
+        this.itemMeta = itemStack.getItemMeta();
+        this.material = itemStack.getType();
     }
 
     public ItemBuilder(@NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta) {
         this.itemStack = itemStack;
         this.itemMeta = itemMeta;
         this.material = itemStack.getType();
-        this.onPaper = HibiscusCommonsPlugin.isOnPaper();
     }
 
     public ItemBuilder setDisplayName(@NotNull String displayName) {
@@ -145,7 +150,12 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemStack build() {
+    public ItemBuilder setToolTip(@Nullable NamespacedKey key) {
+        itemMeta.setTooltipStyle(key);
+        return this;
+    }
+
+    public @NotNull ItemStack build() {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
